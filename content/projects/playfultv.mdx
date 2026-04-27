@@ -1,0 +1,28 @@
+---
+title: "The Playful TV"
+slug: "playful-tv"
+year: 2022
+location: "New York, NY"
+tags: ["Interactive", "Electronics"]
+hero: "/projects/playful-tv/hero.gif"
+heroVideo: "/projects/playful-tv/hero.mp4"
+heroFocus: "50% 50%"
+role:
+  - "R&D"
+  - "Interaction Designer"
+tools: []
+link: ""
+summary: "An interactive installation featuring a modified vintage television that explores the tension between presence and disappearance through the lens of digital surveillance."
+---
+
+## Overview
+
+This work repurposes an old television set to investigate the intangible nature of human engagement and the ways we are seen by technology. By electronically modifying the analog hardware, the installation creates a feedback loop between the participant's physical body and their digital reflection. Without any tactile contact, the mere presence of a person initiates the work's process, inviting a dialogue about how we navigate spaces of invisible monitoring. It is an exploration of the ghosts within our machines, focusing on the moment an observer becomes a participant and the responsibility that comes with being witnessed by an interface.
+
+<Figure src="/projects/playful-tv/assets/playfultv-01.png" aspect="3/2" />
+
+## Process
+
+The process began with the circuit bending of a vintage TV, bypassing original components to allow a direct interface with a digital media signal. The piece utilizes an integrated system of physical computing, featuring a microcontroller and an ultrasonic distance sensor. As a participant approaches, their movement and proximity are captured as real-time variables that dictate the color palette and stylistic distortion of their image, processed via p5.js. The work rewards curiosity and engagement; the more the interactor plays and gets closer, the more vibrant their digital image becomes. However, the moment engagement ceases, the work reacts to the stillness: the image undergoes a violent fragmentation, dissolving into a cold, pixelated black-and-white static. This transition serves as a metaphor for the fragility of memory, our addiction to performing for the media and the way surveillance systems often reduce complex human identities into simplified, binary data. I developed a custom pixelation algorithm that triggers based on a lack of delta-movement, ensuring that the shift from a vivid, interactive state to a fragmented one felt like a meaningful consequence of the participant's withdrawal from engagement.
+
+<Figure src="/projects/playful-tv/assets/playfultv-02.png" aspect="3/2" />

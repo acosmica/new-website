@@ -1,0 +1,31 @@
+---
+title: "Future Me"
+slug: "future-me"
+year: 2022
+tags: ["Interactive", "Creative Code"]
+hero: "/projects/future-me/hero.gif"
+heroVideo: "/projects/future-me/hero.mov"
+heroFocus: "50% 50%"
+tools: []
+link: ""
+role:
+  - "Creative Coder"
+  - "Designer"
+summary: "An interactive piece that invites participants to physically uncover fragments of letters sent to the future, reconstructing a collective narrative through the play of light."
+---
+
+## Overview
+
+FutureMe is a digital reflection on the human desire to communicate across time. The work utilizes a database of scraped public data from the FutureMe project — a platform where individuals write letters to their future selves. In this installation, these intimate, time-traveling messages are deconstructed into a sea of isolated words, waiting to be rediscovered.
+
+<Figure src="/projects/future-me/assets/futureme-01.png" aspect="16/10" />
+
+It challenges the audience to engage in a collective act of reassembly, searching for meaning within a fragmented landscape of hopes, fears, and reflections. By turning a private act of writing into a public act of searching for meaning, the piece explores how we bridge the gap between who we are now, who we might become and how we perceive others around us. At the end, there's a shared sense of belonging while understanding that everyone shares the same human emotions.
+
+## Process
+
+Developed using creative coding in JavaScript with the p5.js library, the installation functions as a light-sensitive interface: the interactor must point a physical light source toward the installation's camera. This bright spot acts as a digital lantern, triggering the appearance of words from the database wherever the light hits the screen. Poetically, the light represents the meditation of a conscious search illuminating the shadows of a blurred connection between the easily forgotten past and the uncertain future.
+
+<Figure src="/projects/future-me/assets/futureme-02.jpeg" aspect="16/10" />
+
+The technical implementation focuses on computer vision to track luminosity in real-time, that triggers words to emerge seamlessly like passing thoughts or distant memories. The development of FutureMe began with the ethical curation and scraping of public letter data, focusing on the linguistic patterns of anticipation and reflection. I chose p5.js for its ability to handle dynamic real-time video processing on the browser, making it accessible for the majority of population. The database of letters I created was processed directly on p5.js, passing through cleaning, organizing and categorization steps. The final process was dedicated to setting up the light detection through a color recognition code that detects the brightest dots of lights.

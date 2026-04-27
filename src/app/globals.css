@@ -1,0 +1,296 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Self-hosted Dreamer TM face — served from /public/fonts/. Fraunces remains
+   as the fallback if the woff2 ever fails to load. */
+@font-face {
+  font-family: "Dreamer TM";
+  src: local("Dreamer TM Regular"),
+       local("DreamerTM-Regular"),
+       url("/fonts/DreamerTM-Regular.woff2") format("woff2"),
+       url("/fonts/DreamerTM-Regular.woff") format("woff"),
+       url("/fonts/DreamerTM-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Retro OS palette — teal desktop, bone chrome, navy accent, classic highlight */
+  --color-desktop: #2d8f8f;       /* Win95 teal wallpaper base */
+  --color-desktop-deep: #0f4747;  /* darker pool for CRT vignette */
+  --color-chrome: #c8c4b8;        /* bone grey window body */
+  --color-chrome-light: #e4e1d8;
+  --color-chrome-dark: #8a867c;
+  --color-ink: #1a1a1a;
+  --color-paper: #f5f1e6;         /* sticky-note / notepad cream */
+  --color-accent: #1a2a6b;        /* classic navy title bar */
+  --color-accent-bright: #3052c7;
+  --color-hot: #d0412c;           /* close-button red */
+  --color-sun: #f5c542;            /* highlight yellow */
+  --color-lime: #7ddc55;
+  --color-shadow: rgba(0, 0, 0, 0.35);
+
+  /* Palette sampled from the acosmica wallpaper — used for folder tabs
+     so the desktop UI blends into the background rather than fighting it. */
+  --color-peach: #f2c9a8;
+  --color-blush: #efb3c3;
+  --color-mauve: #c9a5d4;
+  --color-mint: #a4d9c5;
+  --color-seafoam: #bfe0d2;
+  --color-goldlite: #ead9a0;
+
+  /* Dreamy-terminal scheme for the floating code window — a deep plum
+     window with pastel tokens drawn from the same wallpaper palette. */
+  --color-code-bg: #251a38;
+  --color-code-gutter: #1b1227;
+  --color-code-title-from: #3a2750;
+  --color-code-title-to: #6b4a82;
+  --color-code-text: #ead9e8;
+  --color-code-dim: #a996b8;
+
+  /* Plum chrome — same family as the floating code window, used for the
+     taskbar and folder bodies so the desktop reads as one dreamy system. */
+  --color-plum: #251a38;
+  --color-plum-light: #5a3e7a;
+  --color-plum-dark: #120a1f;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-pixel);
+  --font-hand: var(--font-handwriting);
+  --font-bodoni: var(--font-bodoni);
+  --font-dreamer: "Dreamer TM", var(--font-dreamer-fallback), "Fraunces", "Didot", serif;
+
+  --shadow-pixel: 4px 4px 0 0 var(--color-shadow);
+  --shadow-pixel-lg: 8px 8px 0 0 var(--color-shadow);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+/* Once PixelCursor mounts, it adds this class so the native cursor hides
+   only when the replacement is actually running. Without JS, the native
+   cursor stays visible. */
+body.pixel-cursor-active {
+  cursor: none;
+}
+
+@media (hover: none) {
+  body.pixel-cursor-active {
+    cursor: auto;
+  }
+}
+
+/* Pixel-outset border: the Win95 chunky "raised" bevel. */
+.pixel-outset {
+  border-top: 2px solid var(--color-chrome-light);
+  border-left: 2px solid var(--color-chrome-light);
+  border-right: 2px solid var(--color-chrome-dark);
+  border-bottom: 2px solid var(--color-chrome-dark);
+  box-shadow:
+    inset -1px -1px 0 0 #000,
+    inset 1px 1px 0 0 #fff;
+}
+
+/* Pixel-inset: pressed / sunken panel look */
+.pixel-inset {
+  border-top: 2px solid var(--color-chrome-dark);
+  border-left: 2px solid var(--color-chrome-dark);
+  border-right: 2px solid var(--color-chrome-light);
+  border-bottom: 2px solid var(--color-chrome-light);
+  box-shadow:
+    inset 1px 1px 0 0 #000,
+    inset -1px -1px 0 0 #fff;
+}
+
+/* Plum variants of the bevel — same silhouette, dreamy-terminal colours. */
+.plum-outset {
+  border-top: 2px solid var(--color-plum-light);
+  border-left: 2px solid var(--color-plum-light);
+  border-right: 2px solid var(--color-plum-dark);
+  border-bottom: 2px solid var(--color-plum-dark);
+  box-shadow:
+    inset -1px -1px 0 0 #000,
+    inset 1px 1px 0 0 rgba(234, 217, 232, 0.6);
+}
+
+.plum-inset {
+  border-top: 2px solid var(--color-plum-dark);
+  border-left: 2px solid var(--color-plum-dark);
+  border-right: 2px solid var(--color-plum-light);
+  border-bottom: 2px solid var(--color-plum-light);
+  box-shadow:
+    inset 1px 1px 0 0 #000,
+    inset -1px -1px 0 0 rgba(234, 217, 232, 0.6);
+}
+
+/* Draggable title-bar gradient */
+.title-bar {
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) 0%,
+    var(--color-accent-bright) 100%
+  );
+}
+
+/* CRT scanlines overlay — fixed full-screen, low opacity */
+.crt-scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.18) 0px,
+    rgba(0, 0, 0, 0.18) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.crt-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+}
+
+/* Chromatic aberration for the hero video only */
+.crt-aberration {
+  filter: contrast(1.05) saturate(1.1);
+  mix-blend-mode: normal;
+}
+
+/* Desktop wallpaper pattern — tiny dither dots for texture */
+.desktop-dither {
+  background-color: var(--color-desktop);
+  background-image: radial-gradient(
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 1px
+    );
+  background-size: 4px 4px;
+}
+
+/* Sticky-note shadow */
+.note-shadow {
+  box-shadow:
+    1px 2px 0 rgba(0, 0, 0, 0.08),
+    4px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Scribble — makes hand-drawn SVG look pen-wobbly */
+@keyframes scribble-wobble {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(var(--scribble-rot, 0deg));
+  }
+  50% {
+    transform: translate(0.5px, -0.5px) rotate(calc(var(--scribble-rot, 0deg) + 0.3deg));
+  }
+}
+
+.scribble-idle {
+  animation: scribble-wobble 3.8s ease-in-out infinite;
+}
+
+/* Blinking caret for live code */
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.caret::after {
+  content: "▌";
+  display: inline-block;
+  margin-left: 1px;
+  color: currentColor;
+  animation: caret-blink 1s step-end infinite;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .scribble-idle,
+  .caret::after {
+    animation: none !important;
+  }
+}
+
+/* Pixelated image rendering helper */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+}
+
+/* Hero halftone — same text rendered through a circular-dot mask so the
+   top layer reads like a risograph dot-shift on top of the white serif.
+   Colour continuously cycles through the wallpaper palette. */
+.dither-halftone {
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 7 7'><circle cx='2' cy='2' r='1.4' fill='%23000'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 7 7'><circle cx='2' cy='2' r='1.4' fill='%23000'/></svg>");
+  -webkit-mask-size: 7px 7px;
+  mask-size: 7px 7px;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  animation: halftone-hue 18s linear infinite;
+}
+
+/* Palette sampled from the acosmica wallpaper:
+   warm peach → pink → dusty mauve → mint → soft gold → back. */
+@keyframes halftone-hue {
+  0%   { color: #f8c4a8; }
+  16%  { color: #f2a3b8; }
+  33%  { color: #d98fc7; }
+  50%  { color: #8ed8c6; }
+  66%  { color: #a9e0d2; }
+  83%  { color: #f5d98a; }
+  100% { color: #f8c4a8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dither-halftone { animation: none !important; color: #d98fc7; }
+}
+
+/* Soft cream panel behind hero so the black serif reads on the varied desktop.
+   Echoes the light-paper surface the reference sits on. */
+.hero-paper {
+  background: linear-gradient(180deg, rgba(245, 235, 220, 0.82) 0%, rgba(240, 223, 210, 0.7) 100%);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* Hero phrase — only the first letter renders larger, like a natural
+   drop-cap flourish at the start of each phrase. */
+.hero-line::first-letter {
+  font-size: 1.35em;
+  line-height: 1;
+  padding-right: 0.02em;
+}
+
+/* Hide scrollbars but keep scroll functionality */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* /experiments — Y2K media player NOW PLAYING LED. */
+@keyframes wmp-led-blink {
+  0%, 60% { opacity: 1; }
+  61%, 100% { opacity: 0.25; }
+}
+
+/* /experiments — slow CD spin behind the chrome shell. */
+@keyframes wmp-disc-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="wmp-led-blink"],
+  [style*="wmp-disc-spin"] { animation: none !important; }
+}
+

@@ -11,7 +11,6 @@ tags:
   - Fulldome
   - Immersive
   - Festival
-  - Public Funding
 hero: /gatherings/immer/immer01.jpg
 heroFocus: "50% 40%"
 heroSlides:

@@ -59,8 +59,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${pixel.variable} ${handwriting.variable} ${bodoni.variable} ${dreamerFallback.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="relative min-h-full overflow-hidden bg-desktop text-ink">
+      <body
+        className="relative min-h-full overflow-hidden bg-desktop text-ink"
+        suppressHydrationWarning
+      >
         {children}
         <Taskbar />
         <CRTOverlay />

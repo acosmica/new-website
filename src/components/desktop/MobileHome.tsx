@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 
 const APPS = [
   { href: "/work", label: "Work", emoji: "📁", bg: "bg-peach", id: "folder-work" },
+  { href: "/experiments", label: "Experiments", emoji: "▶", bg: "bg-blush", id: "folder-experiments" },
+  { href: "/gatherings", label: "Gatherings", emoji: "✨", bg: "bg-mauve", id: "folder-gatherings" },
   { href: "/cv", label: "CV", emoji: "📄", bg: "bg-mint", id: "folder-cv" },
-  { href: "/contact", label: "Contact", emoji: "✉", bg: "bg-blush", id: "folder-contact" },
-  { href: "/about", label: "About", emoji: "✦", bg: "bg-mauve", id: "folder-about" },
+  { href: "/contact", label: "Contact", emoji: "✉", bg: "bg-sun", id: "folder-contact" },
+  { href: "/about", label: "About", emoji: "✦", bg: "bg-blush", id: "folder-about" },
 ];
 
 export default function MobileHome() {
@@ -30,80 +32,54 @@ export default function MobileHome() {
   }, []);
 
   return (
-    <div className="relative flex h-[100dvh] w-full flex-col md:hidden">
-      {/* Wallpaper backdrop */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-br from-desktop via-accent to-desktop-deep"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 desktop-dither opacity-40"
-      />
+    <div
+      className="relative flex h-[100dvh] w-full flex-col overflow-hidden pb-12 md:hidden"
+      style={{
+        backgroundColor: "#2a1f2e",
+        backgroundImage:
+          "linear-gradient(180deg, rgba(18,10,31,0.55) 0%, rgba(18,10,31,0.15) 30%, rgba(18,10,31,0.15) 70%, rgba(18,10,31,0.7) 100%), url(/bg/acosmica.jpg)",
+        backgroundSize: "cover, cover",
+        backgroundPosition: "center, 75% center",
+        backgroundRepeat: "no-repeat, no-repeat",
+      }}
+    >
 
-      {/* Status bar */}
-      <div className="flex items-center justify-between px-5 pt-3 font-pixel text-base text-white">
-        <span>{time}</span>
-        <span className="flex items-center gap-1.5 text-sm">
-          <span>5G</span>
-          <span>●●●●</span>
-          <span>82%</span>
-        </span>
-      </div>
-
-      {/* Intro scribbles */}
-      <div className="px-6 pt-10 font-hand text-white">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-5xl leading-none"
-          style={{ transform: "rotate(-4deg)" }}
-        >
+      {/* Intro */}
+      <div className="px-6 pt-12 text-white">
+        <div className="font-dreamer text-7xl italic leading-none tracking-wide">
           hi!
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-2 text-2xl leading-tight"
-        >
-          i'm Micaelle —
-          <br />a multimedia designer
-        </motion.div>
+        </div>
+        <div className="mt-5 font-dreamer text-4xl leading-snug tracking-wide">
+          I'm Micaelle
+          <br />
+          <span className="italic text-blush">a multimedia designer</span>
+          <br />
+          <span className="italic text-blush">&amp; creative technologist</span>
+        </div>
       </div>
 
       {/* App grid */}
-      <div className="mt-auto grid grid-cols-2 gap-6 p-10">
-        {APPS.map((app, i) => (
-          <motion.div
+      <div className="mt-auto grid grid-cols-3 gap-5 px-6 pb-10 pt-8">
+        {APPS.map((app) => (
+          <Link
             key={app.href}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.7 + i * 0.08, type: "spring" }}
+            href={app.href}
+            className="flex flex-col items-center gap-2"
+            prefetch
           >
-            <Link
-              href={app.href}
-              className="flex flex-col items-center gap-2"
-              prefetch
+            <motion.div
+              whileTap={{ scale: 0.92 }}
+              className={`pixel-outset grid size-16 place-items-center text-2xl ${app.bg}`}
             >
-              <motion.div
-                layoutId={app.id}
-                whileTap={{ scale: 0.92 }}
-                className={`pixel-outset grid size-20 place-items-center text-3xl ${app.bg}`}
-              >
-                {app.emoji}
-              </motion.div>
-              <span className="font-pixel text-base leading-none text-white drop-shadow-[1px_1px_0_rgba(0,0,0,0.9)]">
-                {app.label}
-              </span>
-            </Link>
-          </motion.div>
+              {app.emoji}
+            </motion.div>
+            <span className="text-center font-pixel text-sm leading-none text-white drop-shadow-[1px_1px_0_rgba(0,0,0,0.9)]">
+              {app.label}
+            </span>
+          </Link>
         ))}
       </div>
 
-      {/* Home indicator */}
-      <div className="mx-auto mb-3 h-1 w-24 rounded-full bg-white/60" />
     </div>
   );
 }

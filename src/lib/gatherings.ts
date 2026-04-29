@@ -137,6 +137,9 @@ export type EducationalEntry = {
   previewImage?: string;
   imageFocus?: string;
   link?: { href: string; label: string };
+  /** Optional embedded video. youtubeId + optional startSeconds renders a
+   *  16:9 iframe at the top of the detail page. */
+  video?: { youtubeId: string; startSeconds?: number };
 };
 
 export const educational: EducationalEntry[] = readDir("educational").map(
@@ -152,5 +155,6 @@ export const educational: EducationalEntry[] = readDir("educational").map(
     previewImage: data.previewImage as string | undefined,
     imageFocus: data.imageFocus as string | undefined,
     link: data.link as EducationalEntry["link"],
+    video: data.video as EducationalEntry["video"],
   }),
 );

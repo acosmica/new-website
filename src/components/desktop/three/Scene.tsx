@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Group, MathUtils } from "three";
 import LED from "./LED";
-import Pointer3D from "./Pointer3D";
 import GlitchParticles from "./GlitchParticles";
 
 // Vibrant-indicator palette — saturated colours that glow properly under
@@ -37,19 +36,6 @@ const LEDS: Array<{ pos: [number, number, number]; color: string; scale: number 
   { pos: [ 2.4, -2.6, -4.4], color: LED_COLORS[6], scale: 0.9  }, // cyan
   { pos: [-1.6, -0.8, -5.8], color: LED_COLORS[2], scale: 0.75 },
   { pos: [ 1.8, 1.2,  2.2], color: LED_COLORS[4], scale: 0.7  },
-];
-
-const POINTERS: Array<{ pos: [number, number, number]; rot: [number, number, number]; scale: number }> = [
-  { pos: [-3.8, 1.6,  1.4], rot: [0, 0.3, -0.4],  scale: 0.55 },
-  { pos: [ 3.6, -1.8, -2.4], rot: [0, -0.4, 0.6],  scale: 0.5  },
-  { pos: [ 0.6, 2.6, -3.0], rot: [0.2, 0.1, 0.2], scale: 0.45 },
-  { pos: [-2.0, -2.4, 2.6], rot: [-0.1, 0.5, -0.8], scale: 0.55 },
-  { pos: [ 4.4, 1.1, -1.2], rot: [0, -0.2, 0.3],  scale: 0.48 },
-  { pos: [-4.4, -0.6, -3.6], rot: [0.1, 0.6, -0.2], scale: 0.52 },
-  { pos: [-0.4, -1.6, 2.0], rot: [0.1, -0.3, 0.5], scale: 0.38 },
-  { pos: [ 2.0, 1.6,  1.0], rot: [-0.2, 0.4, -0.3], scale: 0.42 },
-  { pos: [-1.2, 0.8, -4.8], rot: [0.1, -0.6, 0.1], scale: 0.4  },
-  { pos: [ 1.4, -0.6, 2.4], rot: [-0.05, 0.7, -0.3], scale: 0.36 },
 ];
 
 /**
@@ -127,17 +113,6 @@ export default function Scene() {
             scale={l.scale}
             floatSpeed={0.6 + (i % 3) * 0.15}
             floatOffset={i * 0.7}
-          />
-        ))}
-
-        {POINTERS.map((p, i) => (
-          <Pointer3D
-            key={`ptr-${i}`}
-            position={p.pos}
-            rotation={p.rot}
-            scale={p.scale}
-            floatSpeed={0.7 + (i % 4) * 0.1}
-            floatOffset={i * 1.2}
           />
         ))}
 

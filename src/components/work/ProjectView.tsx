@@ -424,7 +424,7 @@ export default function ProjectView({ project }: Props) {
           }}
         />
 
-        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1.5 px-6 pb-2 pt-3 md:px-8 md:pb-2.5">
+        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1.5 px-4 pb-2 pt-3 md:px-8 md:pb-2.5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <h1
               className="font-pixel text-4xl leading-none text-paper md:text-6xl"
@@ -432,8 +432,15 @@ export default function ProjectView({ project }: Props) {
             >
               {project.title}
             </h1>
-            <div className="flex flex-col items-end font-mono text-sm leading-tight text-paper/80 md:text-base">
-              {project.location && <span>{project.location}</span>}
+            <div className="flex flex-row flex-wrap items-baseline gap-x-2 font-mono text-sm leading-tight text-paper/80 md:flex-col md:items-end md:gap-x-0 md:text-base">
+              {project.location && (
+                <>
+                  <span>{project.location}</span>
+                  <span aria-hidden className="opacity-60 md:hidden">
+                    ·
+                  </span>
+                </>
+              )}
               <span>{project.year}</span>
             </div>
           </div>
@@ -456,7 +463,7 @@ export default function ProjectView({ project }: Props) {
                 key={tag}
                 href={`/work?tags=${encodeURIComponent(tag)}`}
                 prefetch
-                className="plum-outset bg-plum/80 px-2 py-0.5 font-pixel text-sm leading-none text-code-text backdrop-blur-sm transition-colors hover:bg-mauve hover:text-ink md:text-base"
+                className="rounded-full border border-mauve/50 bg-plum/40 px-3 py-0.5 font-pixel text-sm leading-none text-code-text backdrop-blur-sm transition-colors hover:border-mauve hover:bg-mauve/30 hover:text-paper md:text-base"
               >
                 {tag}
               </Link>
@@ -471,7 +478,7 @@ export default function ProjectView({ project }: Props) {
               {project.role.map((r) => (
                 <span
                   key={r}
-                  className="plum-outset bg-plum-light/30 px-2 py-0.5 font-pixel text-sm leading-none text-paper backdrop-blur-sm md:text-base"
+                  className="rounded-full border border-paper/30 bg-plum-light/20 px-3 py-0.5 font-pixel text-sm leading-none text-paper backdrop-blur-sm md:text-base"
                 >
                   {r}
                 </span>
@@ -487,7 +494,7 @@ export default function ProjectView({ project }: Props) {
               {project.exhibition.map((e) => (
                 <span
                   key={e}
-                  className="plum-outset bg-plum-light/30 px-2 py-0.5 font-pixel text-sm leading-none text-paper backdrop-blur-sm md:text-base"
+                  className="rounded-full border border-paper/30 bg-plum-light/20 px-3 py-0.5 font-pixel text-sm leading-none text-paper backdrop-blur-sm md:text-base"
                 >
                   {e}
                 </span>
@@ -497,7 +504,7 @@ export default function ProjectView({ project }: Props) {
         </div>
       </section>
 
-      <div className="mx-auto max-w-[88rem] px-8 py-8 md:px-12">
+      <div className="mx-auto max-w-[88rem] px-5 py-6 md:px-12 md:py-8">
         <div className="prose prose-invert prose-lg max-w-none font-sans text-code-text prose-headings:font-pixel prose-headings:text-code-text prose-h2:text-2xl prose-h3:text-xl prose-a:text-mauve hover:prose-a:text-blush prose-strong:text-code-text prose-code:text-peach">
           <MDXRemote
             source={project.body}

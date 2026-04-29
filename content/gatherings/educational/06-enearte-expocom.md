@@ -1,7 +1,7 @@
 ---
 slug: enearte-expocom
 kind: Academic
-title: ENEARTE & EXPOCOM
+title: Academic Research and Conferences
 venue: "Brazilian Symposiums of Visual Studies & Communication"
 year: "2019"
 teaser: "Early-career research presentations at renowned Brazilian symposiums in visual studies and communication."

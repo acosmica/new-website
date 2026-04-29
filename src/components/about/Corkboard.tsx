@@ -1,7 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import HydraPolaroid from "./HydraPolaroid";
 import StickyNote from "./StickyNote";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+  return isMobile;
+}
 
 // --- Spiral geometry (shared by the mask + the SVG overlays so the wire
 // passes through exactly where the paper is cut) ------------------------
@@ -41,6 +54,22 @@ const PAPER_STYLE: React.CSSProperties = {
   WebkitMaskImage: HOLE_MASK,
   maskComposite: "intersect",
   WebkitMaskComposite: "source-in",
+};
+
+// Mobile variant: no pink margin line (the bio uses the full width of
+// the page, so a vertical margin guide doesn't make sense), no spiral
+// holes, and rule lines kept on the same 32px cadence so 32px line-height
+// text sits exactly on the lines.
+const MOBILE_PAPER_STYLE: React.CSSProperties = {
+  backgroundColor: "#cec2d2",
+  backgroundImage: [
+    "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 32px)",
+    "linear-gradient(112deg, transparent 0%, transparent 22%, rgba(0,0,0,0.06) 23%, transparent 24%, transparent 100%)",
+    "linear-gradient(82deg, transparent 0%, transparent 55%, rgba(0,0,0,0.05) 56%, transparent 57%, transparent 100%)",
+    "linear-gradient(155deg, transparent 0%, transparent 72%, rgba(0,0,0,0.04) 73%, transparent 74%, transparent 100%)",
+    "linear-gradient(70deg, transparent 0%, transparent 35%, rgba(255,255,255,0.04) 36%, rgba(255,255,255,0.04) 37%, transparent 38%, transparent 100%)",
+    "linear-gradient(180deg, #d4c7d8 0%, #c4b7c8 100%)",
+  ].join(", "),
 };
 
 const PAPER_NOISE =
@@ -354,20 +383,30 @@ function WashiTape({
 const PAGE_HEIGHT = 1024;
 
 export default function Corkboard() {
+  const isMobile = useIsMobile();
   return (
     // Outer scroll viewport — fixed to the window body area. Inner wrapper
     // is explicitly sized so absolute-positioned paper/spiral/content cover
     // the full scroll extent and move with the scroll.
     <div className="relative h-[calc(100dvh-140px)] w-full overflow-y-auto overflow-x-hidden">
-      <div className="relative w-full" style={{ height: `${PAGE_HEIGHT}px` }}>
-      {/* Rear of the spiral — visible only through the punched holes */}
-      <SpiralRear />
+      <div
+        className="relative w-full"
+        style={
+          isMobile
+            ? { minHeight: "calc(100dvh - 140px)" }
+            : { height: `${PAGE_HEIGHT}px` }
+        }
+      >
+      {/* Spiral binding + punched holes — desktop only. On mobile the page
+          is one continuous tall sheet without the centre split. */}
+      {!isMobile && <SpiralRear />}
 
-      {/* Notebook paper with transparent holes punched down the centre */}
+      {/* Notebook paper. On desktop, holes are punched down the centre via
+          a CSS mask. On mobile, no mask = continuous paper. */}
       <div
         aria-hidden
         className="absolute inset-0"
-        style={PAPER_STYLE}
+        style={isMobile ? MOBILE_PAPER_STYLE : PAPER_STYLE}
       />
 
       {/* Paper grain + wrinkle layers (masked identically so noise also
@@ -378,10 +417,12 @@ export default function Corkboard() {
         style={{
           backgroundImage: PAPER_NOISE,
           backgroundSize: "400px 400px",
-          maskImage: HOLE_MASK,
-          WebkitMaskImage: HOLE_MASK,
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
+          ...(isMobile ? {} : {
+            maskImage: HOLE_MASK,
+            WebkitMaskImage: HOLE_MASK,
+            maskComposite: "intersect" as const,
+            WebkitMaskComposite: "source-in",
+          }),
         }}
       />
       <div
@@ -390,81 +431,144 @@ export default function Corkboard() {
         style={{
           backgroundImage: PAPER_NOISE,
           backgroundSize: "180px 180px",
-          maskImage: HOLE_MASK,
-          WebkitMaskImage: HOLE_MASK,
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
+          ...(isMobile ? {} : {
+            maskImage: HOLE_MASK,
+            WebkitMaskImage: HOLE_MASK,
+            maskComposite: "intersect" as const,
+            WebkitMaskComposite: "source-in",
+          }),
         }}
       />
 
-      {/* Front of the spiral — sits on top of the paper */}
-      <SpiralFront />
+      {!isMobile && <SpiralFront />}
 
-      {/* Polaroid header — top right */}
-      <HydraPolaroid
-        src="/about/me.jpg"
-        caption="mini mica, live-coded"
-        rotate={5}
-        size={320}
-        style={{ position: "absolute", top: "40px", right: "4%", zIndex: 30 }}
-      />
-
-      {/* Sticky notes — only the originals kept */}
-      <div className="absolute inset-0 z-20">
-        <StickyNote
-          color="mauve"
-          rotate={-4}
-          style={{ top: "24px", left: "6rem" }}
-          width={280}
-        >
-          Hi, I&apos;m Micaelle!
-          <br />
-          A multimedia creative
-          <br />
-          making magic ✧
-        </StickyNote>
-
-        <StickyNote
-          color="blush"
-          rotate={3}
-          style={{ top: "760px", right: "3rem" }}
-          width={260}
-        >
-          currently obsessed with:
-          <br />
-          glitches, vibe coding
-          <br />
-          and baking focaccia
-        </StickyNote>
-      </div>
-
-      {/* Main bio — left page, spans from just past the pink margin line
-          to just shy of the spiral binding. Starts at the very top (on-rule
-          baseline) and wraps around the "Hi Micaelle" sticky via an invisible
-          float reservation. 17px Geist Mono on a 32px line-height keeps text
-          baselines locked to the paper's ruled cadence. */}
-      <div
-        className="pointer-events-none absolute z-10 font-mono text-ink/85"
-        style={{
-          top: "70px",
-          left: "4rem",
-          right: "calc(50% + 3.5rem)",
-          fontSize: "17px",
-          lineHeight: "32px",
-          whiteSpace: "pre-wrap",
-        }}
-      >
-        <div
-          aria-hidden
-          style={{
-            float: "left",
-            width: "21rem",
-            height: "88px",
-            shapeOutside: "margin-box",
-            marginRight: "0.5rem",
-          }}
+      {/* Polaroid — desktop: large, top-right with the live hydra overlay.
+          Mobile uses a static, tighter-margin polaroid floated into the
+          bio block (rendered below) so text wraps on its left/under it. */}
+      {!isMobile && (
+        <HydraPolaroid
+          src="/about/me.jpg"
+          caption="mini mica, live-coded"
+          rotate={5}
+          size={320}
+          style={{ position: "absolute", top: "40px", right: "4%", zIndex: 30 }}
         />
-        {`I am a multidisciplinary artist, creative technologist, researcher, producer, witch and several other hyphens at the famous intersection of art, design, and technology.
+      )}
+
+      {/* Sticky notes — desktop only. Mobile keeps the page minimal. */}
+      {!isMobile && (
+        <div className="absolute inset-0 z-20">
+          <StickyNote
+            color="mauve"
+            rotate={-4}
+            style={{ top: "24px", left: "6rem" }}
+            width={280}
+          >
+            Hi, I&apos;m Micaelle!
+            <br />
+            A multimedia creative
+            <br />
+            making magic ✧
+          </StickyNote>
+
+          <StickyNote
+            color="blush"
+            rotate={3}
+            style={{ top: "760px", right: "3rem" }}
+            width={260}
+          >
+            currently obsessed with:
+            <br />
+            glitches, vibe coding
+            <br />
+            and baking focaccia
+          </StickyNote>
+        </div>
+      )}
+
+      {/* Bio — desktop: split into two ruled columns flanking the spiral.
+          Mobile: one continuous tall column spanning the full page width.
+          17px Geist Mono on a 32px line-height keeps text baselines locked
+          to the paper's ruled cadence. */}
+      {isMobile ? (
+        <div
+          className="relative z-10 font-mono text-ink/85"
+          style={{
+            // 32px paddingTop puts the first text line box exactly between
+            // the first and second rule line, so each baseline (≈24px from
+            // the top of its 32px line box) lands on a rule line below.
+            paddingTop: "32px",
+            paddingLeft: "1.25rem",
+            paddingRight: "1.25rem",
+            paddingBottom: "3rem",
+            fontSize: "17px",
+            lineHeight: "32px",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {/* Floated static polaroid — text wraps to its left and below */}
+          <figure
+            className="float-right ml-3 mb-2"
+            style={{
+              transform: "rotate(5deg)",
+              filter: "drop-shadow(2px 3px 0 rgba(0,0,0,0.35))",
+            }}
+          >
+            <div className="bg-paper p-1.5 pb-5">
+              <div className="relative aspect-square w-[160px] overflow-hidden bg-plum">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/about/me.jpg"
+                  alt="Micaelle"
+                  className="block h-full w-full object-cover"
+                />
+              </div>
+              <figcaption className="mt-1 text-center font-hand text-base leading-none text-ink">
+                mini mica
+              </figcaption>
+            </div>
+          </figure>
+
+          {`I am a multidisciplinary artist, creative technologist, researcher, producer, witch and several other hyphens at the famous intersection of art, design, and technology.
+
+Born and raised in Brazil and now based in Brooklyn, NY, I specialize in building immersive and interactive experiences across every scale imaginable.
+
+My toolkit is a bit of a kaleidoscope: it ranges from traditional film and storytelling to electronics, VR, creative coding, and AI. With a BA in Cinema and Audiovisual and a Masters from NYU’s Interactive Telecommunications Program (ITP), I’ve spent my career figuring out how to make tech feels human, emotional and a little bit magical.
+
+On the industry side, I worked as an Associated Artist at 3LD Art & Technology and a Creative Technologist at Smooth Technology, collaborating with brands and artists to turn fun ideas into reality.
+
+As the founder and Creative Director of thecode, I’ve led the development of large-scale installations for brands like Heineken and Coca-Cola, and I head up production for the IMMER and ARTELLIGENT festivals.
+
+My personal artistic practice focuses on the concept of magic and how it manifests in our world.
+
+Through a researcher-practitioner perspective, I explore how ritual, ancestrality, and memory manifest through interactive objects and expanded audiovisual spaces. The idea is to create spaces of (co) and (re)creation, where interactors can engage with speculation, deep thinking, rebellion, embodiement and other sensations.
+
+My energy also extends into community-building and education, being a former professor at LaGuardia Community College and leading free workshops dreaming about technology as a tool for collective connection.`}
+        </div>
+      ) : (
+        <>
+          <div
+            className="pointer-events-none absolute z-10 font-mono text-ink/85"
+            style={{
+              top: "70px",
+              left: "4rem",
+              right: "calc(50% + 3.5rem)",
+              fontSize: "17px",
+              lineHeight: "32px",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            <div
+              aria-hidden
+              style={{
+                float: "left",
+                width: "21rem",
+                height: "88px",
+                shapeOutside: "margin-box",
+                marginRight: "0.5rem",
+              }}
+            />
+            {`I am a multidisciplinary artist, creative technologist, researcher, producer, witch and several other hyphens at the famous intersection of art, design, and technology.
 
 Born and raised in Brazil and now based in Brooklyn, NY, I specialize in building immersive and interactive experiences across every scale imaginable.
 
@@ -473,72 +577,71 @@ My toolkit is a bit of a kaleidoscope: it ranges from traditional film and story
 On the industry side, I worked as an Associated Artist at 3LD Art & Technology and a Creative Technologist at Smooth Technology, collaborating with brands and artists to turn fun ideas into reality.
 
 As the founder and Creative Director of thecode, I’ve led the development of large-scale installations for brands like Heineken and Coca-Cola, and I head up production for the IMMER and ARTELLIGENT festivals.`}
-      </div>
+          </div>
 
-      {/* Secondary bio — right page, spans from the spiral out to the
-          right edge. Starts at the top (on-rule) and wraps around the
-          polaroid via an invisible float reservation. */}
-      <div
-        className="pointer-events-none absolute z-10 font-mono text-ink/85"
-        style={{
-          top: "70px",
-          left: "calc(50% + 3.5rem)",
-          right: "3rem",
-          fontSize: "17px",
-          lineHeight: "32px",
-          whiteSpace: "pre-wrap",
-        }}
-      >
-        <div
-          aria-hidden
-          style={{
-            float: "right",
-            width: "22rem",
-            height: "410px",
-            shapeOutside: "margin-box",
-            marginLeft: "0.5rem",
-          }}
-        />
-        {`My personal artistic practice focuses on the concept of magic and how it manifests in our world.
+          <div
+            className="pointer-events-none absolute z-10 font-mono text-ink/85"
+            style={{
+              top: "70px",
+              left: "calc(50% + 3.5rem)",
+              right: "3rem",
+              fontSize: "17px",
+              lineHeight: "32px",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            <div
+              aria-hidden
+              style={{
+                float: "right",
+                width: "22rem",
+                height: "410px",
+                shapeOutside: "margin-box",
+                marginLeft: "0.5rem",
+              }}
+            />
+            {`My personal artistic practice focuses on the concept of magic and how it manifests in our world.
 
 Through a researcher-practitioner perspective, I explore how ritual, ancestrality, and memory manifest through interactive objects and expanded audiovisual spaces. The idea is to create spaces of (co) and (re)creation, where interactors can engage with speculation, deep thinking, rebellion, embodiement and other sensations.
 
 My energy also extends into community-building and education, being a former professor at LaGuardia Community College and leading free workshops dreaming about technology as a tool for collective connection.`}
-      </div>
+          </div>
+        </>
+      )}
 
-      {/* Washi tape — thecode pull-quote, stuck across the lower white
-          margin of the polaroid like a diary entry. z above polaroid (z-30). */}
-      <WashiTape
-        color="mauve"
-        rotate={-3}
-        width={370}
-        style={{
-          top: "400px",
-          right: "calc(4% - 25px)",
-          whiteSpace: "nowrap",
-          zIndex: 40,
-        }}
-      >
-        founder & creative director @ thecode ✺
-      </WashiTape>
+      {/* Washi tape, glitter stars, margin scribble — desktop only. */}
+      {!isMobile && (
+        <>
+          <WashiTape
+            color="mauve"
+            rotate={-3}
+            width={370}
+            style={{
+              top: "400px",
+              right: "calc(4% - 25px)",
+              whiteSpace: "nowrap",
+              zIndex: 40,
+            }}
+          >
+            founder & creative director @ thecode ✺
+          </WashiTape>
 
-      {/* Glitter-pen stars scattered across both pages */}
-      <div className="pointer-events-none absolute inset-0 z-[15]">
-        {GLITTER_STARS.map((s, i) => (
-          <GlitterStar key={i} spec={s} idx={i} />
-        ))}
-      </div>
+          <div className="pointer-events-none absolute inset-0 z-[15]">
+            {GLITTER_STARS.map((s, i) => (
+              <GlitterStar key={i} spec={s} idx={i} />
+            ))}
+          </div>
 
-      {/* Margin scribble — left edge of the right page, aligned with
-          the "currently obsessed" sticky on the far right. */}
-      <div className="pointer-events-none absolute inset-0 z-10 font-hand text-2xl text-ink/60">
-        <div
-          style={{ position: "absolute", top: "810px", left: "calc(50% + 4.5rem)" }}
-          className="-rotate-3"
-        >
-          ~ keep making weird things
-        </div>
-      </div>
+          <div className="pointer-events-none absolute inset-0 z-10 font-hand text-2xl text-ink/60">
+            <div
+              style={{ position: "absolute", top: "810px", left: "calc(50% + 4.5rem)" }}
+              className="-rotate-3"
+            >
+              ~ keep making weird things
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Stamp layer — StampStudio portals the user's placed stamps here
           so they scroll with the notebook content. Kept pointer-events-none

@@ -401,7 +401,7 @@ export default async function FeaturedDetail({
                 {data.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="plum-outset bg-plum/80 px-2 py-0.5 font-pixel text-base leading-none text-code-text"
+                    className="rounded-full border border-mauve/50 bg-plum-light/20 px-3 py-0.5 font-pixel text-base leading-none text-code-text"
                   >
                     {tag}
                   </span>
@@ -411,7 +411,7 @@ export default async function FeaturedDetail({
                 <span className="font-pixel text-sm uppercase leading-none tracking-[0.18em] text-paper/55">
                   Role ▸
                 </span>
-                <span className="plum-outset bg-plum-light/30 px-2 py-0.5 font-pixel text-base leading-none text-paper">
+                <span className="rounded-full border border-paper/30 bg-plum-light/15 px-3 py-0.5 font-pixel text-base leading-none text-paper">
                   {data.role}
                 </span>
               </div>

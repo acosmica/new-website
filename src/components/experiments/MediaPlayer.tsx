@@ -50,6 +50,10 @@ export default function MediaPlayer({
   const trackTitle = track?.title ?? null;
   const closeToDesktop = () => router.push("/");
 
+  // Mobile intro disclosure — when a track is selected the intro display
+  // collapses into a toggle bar at the top, but can be re-opened.
+  const [introOpen, setIntroOpen] = useState(false);
+
   return (
     <div className="relative w-full max-w-[1360px]">
       <div
@@ -77,27 +81,65 @@ export default function MediaPlayer({
           isPlaying={isPlaying}
           trackTitle={trackTitle}
           onClose={closeToDesktop}
+          mobileToggleable={!!track}
+          introOpen={introOpen}
+          onMobileToggle={() => setIntroOpen((v) => !v)}
+          onDesktopReturnToIntro={track ? stop : undefined}
         />
 
+        {/* Mobile-only intro panel — visually attached to the title bar
+            above (no top gap, top corners squared) so it reads as a
+            dropdown of the tab itself, not a separate box. */}
         <div
-          className="relative z-10 mt-3 grid gap-3"
+          id="experiments-intro-panel"
+          className={`relative z-10 min-h-[420px] md:hidden ${
+            track && !introOpen ? "hidden" : ""
+          }`}
+          style={{
+            marginTop: "-1px",
+            borderBottomLeftRadius: "10px",
+            borderBottomRightRadius: "10px",
+            overflow: "hidden",
+          }}
+        >
+          <PlayerDisplay intro={intro} track={null} playing={false} />
+        </div>
+
+        <div
+          className={`relative z-10 flex flex-col gap-3 md:grid md:mt-3 ${
+            track && introOpen ? "mt-3" : "mt-3 md:mt-3"
+          }`}
           style={{
             gridTemplateColumns: "minmax(0, 7fr) minmax(0, 3fr)",
           }}
         >
-          <div className="min-h-[600px]">
+          {/* Desktop display — always shows. On mobile this is hidden in
+              favour of the inline preview inside the playlist below. */}
+          <div className="hidden min-h-[600px] md:block">
             <PlayerDisplay intro={intro} track={track} playing={isPlaying} />
           </div>
-          <div className="min-h-[600px]">
+
+          <div className="min-h-[320px] md:min-h-[600px]">
             <PlayerPlaylist
               experiments={experiments}
               activeIndex={trackIndex}
               onSelect={select}
+              inlinePreview={
+                track ? (
+                  <div className="md:hidden">
+                    <PlayerDisplay
+                      intro={intro}
+                      track={track}
+                      playing={isPlaying}
+                    />
+                  </div>
+                ) : null
+              }
             />
           </div>
         </div>
 
-        <div className="relative z-10 mt-3">
+        <div className="relative z-10 mt-3 hidden md:block">
           <PlayerTransport
             playing={isPlaying}
             onPlayPause={playPause}
@@ -115,25 +157,29 @@ function TitleBar({
   isPlaying,
   trackTitle,
   onClose,
+  mobileToggleable,
+  introOpen,
+  onMobileToggle,
+  onDesktopReturnToIntro,
 }: {
   isPlaying: boolean;
   trackTitle: string | null;
   onClose: () => void;
+  /** When true on mobile, the title bar acts as a tap target that
+   *  toggles the intro panel (chevron rendered next to the title). */
+  mobileToggleable?: boolean;
+  introOpen?: boolean;
+  onMobileToggle?: () => void;
+  /** When provided (desktop only), clicking the title bar clears the
+   *  active track so the main display returns to the intro. */
+  onDesktopReturnToIntro?: () => void;
 }) {
-  return (
-    <div
-      className="relative z-10 flex h-[36px] items-center justify-between rounded-[10px] px-4"
-      style={{
-        background:
-          "linear-gradient(180deg, #3a2750 0%, #1f1238 60%, #120a1f 100%)",
-        boxShadow:
-          "inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.6)",
-      }}
-    >
-      <div className="flex items-center gap-3">
+  const interior = (
+    <>
+      <div className="flex min-w-0 items-center gap-3">
         <span
           aria-hidden
-          className="inline-block rounded-full"
+          className="hidden shrink-0 rounded-full md:inline-block"
           style={{
             width: "12px",
             height: "12px",
@@ -144,10 +190,26 @@ function TitleBar({
           }}
         />
         <span
-          className="font-mono text-[15px] uppercase tracking-[0.28em]"
+          className="hidden truncate font-mono text-[15px] uppercase tracking-[0.28em] md:inline"
           style={{ color: "#f2c9a8", textShadow: "0 0 6px rgba(242,201,168,0.6)" }}
         >
-          Mica Lages — Experiments.wmp
+          Experiments.wmp
+        </span>
+        <span
+          className="truncate font-mono text-[12px] uppercase tracking-[0.18em] md:hidden"
+          style={{ color: "#f2c9a8", textShadow: "0 0 6px rgba(242,201,168,0.6)" }}
+        >
+          Experiments.wmp
+        </span>
+        <span
+          aria-hidden
+          className="text-base leading-none transition-transform duration-150 md:hidden"
+          style={{
+            transform: mobileToggleable && introOpen ? "rotate(180deg)" : "rotate(0deg)",
+            color: "#ff7eb6",
+          }}
+        >
+          ▾
         </span>
         {isPlaying && trackTitle && (
           <span
@@ -163,6 +225,56 @@ function TitleBar({
         <WinBtn label="▢" />
         <WinBtn label="✕" hot onClick={onClose} ariaLabel="Close — return to desktop" />
       </div>
+    </>
+  );
+
+  const sharedClass =
+    "relative z-10 flex h-[36px] items-center justify-between rounded-[10px] px-4";
+  const sharedStyle: React.CSSProperties = {
+    background:
+      "linear-gradient(180deg, #3a2750 0%, #1f1238 60%, #120a1f 100%)",
+    boxShadow:
+      "inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.6)",
+  };
+
+  const interactive = mobileToggleable || !!onDesktopReturnToIntro;
+
+  if (interactive) {
+    // The bar acts as a tap/click target. On mobile it toggles the
+    // intro dropdown; on desktop it clears the active track and
+    // returns the main display to the intro view.
+    const handleActivate = () => {
+      const isMobile =
+        typeof window !== "undefined" &&
+        window.matchMedia("(max-width: 767px)").matches;
+      if (isMobile) onMobileToggle?.();
+      else onDesktopReturnToIntro?.();
+    };
+    return (
+      <div
+        className={`${sharedClass} cursor-pointer`}
+        style={sharedStyle}
+        onClick={handleActivate}
+        role="button"
+        tabIndex={0}
+        aria-expanded={mobileToggleable ? introOpen : undefined}
+        aria-controls={mobileToggleable ? "experiments-intro-panel" : undefined}
+        aria-label={onDesktopReturnToIntro ? "Return to intro" : undefined}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleActivate();
+          }
+        }}
+      >
+        {interior}
+      </div>
+    );
+  }
+
+  return (
+    <div className={sharedClass} style={sharedStyle}>
+      {interior}
     </div>
   );
 }
@@ -181,7 +293,12 @@ function WinBtn({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={(e) => {
+        // Don't bubble to the parent title bar (which on mobile acts
+        // as the intro toggle).
+        e.stopPropagation();
+        onClick?.();
+      }}
       aria-label={ariaLabel}
       tabIndex={onClick ? 0 : -1}
       aria-hidden={onClick ? undefined : true}

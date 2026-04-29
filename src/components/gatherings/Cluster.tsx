@@ -55,11 +55,8 @@ function IntroPopup() {
   return (
     <MiniWindow title="welcome.txt" fileName="readme" variant="paper">
       <div className="px-5 py-5">
-        <span className="font-pixel text-sm uppercase tracking-[0.22em] text-ink/55">
-          Folder ▸ Gatherings
-        </span>
         <h1
-          className="mt-1 font-pixel text-5xl leading-[0.9] text-ink md:text-6xl"
+          className="font-pixel text-5xl leading-[0.9] text-ink md:text-6xl"
           style={{ textShadow: "1px 1px 0 rgba(208, 65, 44, 0.25)" }}
         >
           {intro.title}
@@ -145,7 +142,7 @@ function FeaturedPopup({ slug }: { slug: "artelligent" | "immer" }) {
           {data.tags.map((t) => (
             <span
               key={t}
-              className="plum-outset bg-plum-light/25 px-1.5 py-0.5 font-pixel text-base leading-none text-paper"
+              className="rounded-full border border-mauve/50 bg-plum-light/20 px-2.5 py-0.5 font-pixel text-base leading-none text-paper"
             >
               {t}
             </span>
@@ -208,7 +205,7 @@ function EventsPopup() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                    <span className="plum-outset bg-plum-light/30 px-1.5 py-0.5 font-pixel text-sm leading-none text-paper">
+                    <span className="rounded-full border border-paper/30 bg-plum-light/15 px-3 py-0.5 font-pixel text-sm leading-none text-paper">
                       {e.role}
                     </span>
                     <span className="font-mono text-sm text-paper/65">

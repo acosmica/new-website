@@ -77,12 +77,6 @@ function IntroView({ intro }: { intro: IntroPayload }) {
   return (
     <div className="flex flex-1 flex-col justify-center gap-5">
       <div>
-        <p
-          className="font-mono text-[18px] uppercase tracking-[0.3em]"
-          style={{ color: ACCENT, textShadow: `0 0 6px ${ACCENT_GLOW}` }}
-        >
-          ▸ Experiments · v1.0
-        </p>
         <h1
           className="mt-2 font-pixel uppercase leading-[0.9]"
           style={{
@@ -105,15 +99,15 @@ function IntroView({ intro }: { intro: IntroPayload }) {
         </p>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         {intro.body.map((p, i) => (
           <p
             key={i}
-            className="font-pixel leading-snug"
+            className="font-sans leading-relaxed"
             style={{
               color: "#f7e3d0",
               textShadow: `0 0 3px ${PHOSPHOR_GLOW}`,
-              fontSize: "clamp(1.25rem, 1.6vw, 1.55rem)",
+              fontSize: "clamp(1rem, 1.05vw, 1.125rem)",
             }}
           >
             {p}
@@ -122,10 +116,16 @@ function IntroView({ intro }: { intro: IntroPayload }) {
       </div>
 
       <p
-        className="mt-1 font-mono text-[18px] uppercase tracking-[0.24em]"
+        className="mt-1 hidden font-mono text-[18px] uppercase tracking-[0.24em] md:block"
         style={{ color: PHOSPHOR, opacity: 0.85 }}
       >
-        ◂ Select a track from the playlist to inspect
+        Select a track from the playlist to inspect ▸
+      </p>
+      <p
+        className="mt-1 font-mono text-[14px] uppercase tracking-[0.22em] md:hidden"
+        style={{ color: PHOSPHOR, opacity: 0.85 }}
+      >
+        ▾ select a project below to inspect
       </p>
     </div>
   );
@@ -250,7 +250,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
 
       {slideImages.length > 1 && (
         <div
-          className="absolute right-3 top-3 rounded-md px-2.5 py-1 font-mono text-[14px] tabular-nums uppercase tracking-[0.18em]"
+          className="absolute right-3 top-3 hidden rounded-md px-2.5 py-1 font-mono text-[14px] tabular-nums uppercase tracking-[0.18em] md:block"
           style={{
             color: PHOSPHOR,
             background: "rgba(10,5,17,0.7)",
@@ -302,57 +302,43 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
     <Link
       href={`/experiments/${track.slug}`}
       prefetch
-      className="self-start font-mono uppercase tracking-[0.22em] outline-none"
-      style={{
-        padding: "8px 18px",
-        borderRadius: "999px",
-        background:
-          "linear-gradient(180deg, #ff9eb8 0%, #ff7eb6 50%, #c9a5d4 100%)",
-        color: "#1a0f2c",
-        fontSize: "12px",
-        boxShadow:
-          "inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.45), 0 0 14px rgba(255,126,182,0.45)",
-        cursor: "pointer",
-      }}
+      className="plum-outset self-start bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50"
     >
-      Learn more ▸
+      Learn more →
     </Link>
   );
 
   if (portrait) {
     return (
       <>
-        <div className="flex h-full min-h-0 w-full flex-row gap-5">
-          {/* Vertical carousel — left, sized to image aspect */}
+        {/* Mobile: image on top full width, text + button below.
+            Desktop (md+): vertical carousel left (38%), text right. */}
+        <div className="flex h-full min-h-0 w-full flex-col gap-4 md:flex-row md:gap-5">
           <div
-            className="flex shrink-0 items-center justify-center"
-            style={{ width: "38%" }}
+            className="flex w-full shrink-0 items-center justify-center md:w-[38%]"
           >
             {carousel}
           </div>
 
-          {/* Text panel — right */}
-          <div className="flex min-w-0 flex-1 flex-col justify-center gap-4">
-            <div>
-              <h2
-                className="font-pixel uppercase leading-[0.95]"
-                style={{
-                  color: PHOSPHOR,
-                  textShadow: `0 0 6px ${PHOSPHOR_GLOW}, 0 0 18px rgba(242,201,168,0.4)`,
-                  fontSize: "clamp(1.8rem, 3.6vw, 3rem)",
-                }}
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-3 md:gap-4">
+            <h2
+              className="hidden font-pixel uppercase leading-[0.95] md:block"
+              style={{
+                color: PHOSPHOR,
+                textShadow: `0 0 6px ${PHOSPHOR_GLOW}, 0 0 18px rgba(242,201,168,0.4)`,
+                fontSize: "clamp(1.8rem, 3.6vw, 3rem)",
+              }}
+            >
+              {track.title}
+            </h2>
+            {tagLine && (
+              <p
+                className="hidden font-mono text-[15px] uppercase tracking-[0.18em] md:block"
+                style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
               >
-                {track.title}
-              </h2>
-              {tagLine && (
-                <p
-                  className="mt-2 font-mono text-[15px] uppercase tracking-[0.18em]"
-                  style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
-                >
-                  {tagLine}
-                </p>
-              )}
-            </div>
+                {tagLine}
+              </p>
+            )}
 
             {summary && (
               <p
@@ -381,7 +367,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
       <div className="flex shrink-0 flex-col gap-2">
         <div className="flex items-baseline justify-between gap-4">
           <h2
-            className="truncate font-pixel uppercase leading-[0.95]"
+            className="hidden truncate font-pixel uppercase leading-[0.95] md:block"
             style={{
               color: PHOSPHOR,
               textShadow: `0 0 6px ${PHOSPHOR_GLOW}, 0 0 18px rgba(242,201,168,0.4)`,

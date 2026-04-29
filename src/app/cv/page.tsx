@@ -88,7 +88,7 @@ export default function CVPage() {
                 {cv.skills.map((s) => (
                   <span
                     key={s}
-                    className="plum-outset bg-plum px-2 py-0.5 font-pixel text-base leading-none text-code-text"
+                    className="rounded-full border border-mauve/50 bg-plum-light/20 px-3 py-0.5 font-pixel text-base leading-none text-code-text"
                   >
                     {s}
                   </span>

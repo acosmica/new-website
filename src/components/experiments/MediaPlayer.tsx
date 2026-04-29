@@ -144,14 +144,14 @@ function TitleBar({
           }}
         />
         <span
-          className="font-mono text-[13px] uppercase tracking-[0.28em]"
+          className="font-mono text-[15px] uppercase tracking-[0.28em]"
           style={{ color: "#f2c9a8", textShadow: "0 0 6px rgba(242,201,168,0.6)" }}
         >
           Mica Lages — Experiments.wmp
         </span>
         {isPlaying && trackTitle && (
           <span
-            className="hidden truncate font-mono text-[12px] uppercase tracking-[0.22em] md:inline"
+            className="hidden truncate font-mono text-[14px] uppercase tracking-[0.22em] md:inline"
             style={{ color: "#ff7eb6" }}
           >
             ▶ {trackTitle}

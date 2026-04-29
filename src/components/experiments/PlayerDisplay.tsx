@@ -78,7 +78,7 @@ function IntroView({ intro }: { intro: IntroPayload }) {
     <div className="flex flex-1 flex-col justify-center gap-5">
       <div>
         <p
-          className="font-mono text-[13px] uppercase tracking-[0.3em]"
+          className="font-mono text-[18px] uppercase tracking-[0.3em]"
           style={{ color: ACCENT, textShadow: `0 0 6px ${ACCENT_GLOW}` }}
         >
           ▸ Experiments · v1.0
@@ -88,7 +88,7 @@ function IntroView({ intro }: { intro: IntroPayload }) {
           style={{
             color: PHOSPHOR,
             textShadow: `0 0 6px ${PHOSPHOR_GLOW}, 0 0 18px rgba(242,201,168,0.45)`,
-            fontSize: "clamp(2.4rem, 5.4vw, 4.4rem)",
+            fontSize: "clamp(3rem, 6.6vw, 5.4rem)",
           }}
         >
           {intro.title}
@@ -98,7 +98,7 @@ function IntroView({ intro }: { intro: IntroPayload }) {
           style={{
             color: SOFT,
             textShadow: `0 0 4px ${PHOSPHOR_GLOW}`,
-            fontSize: "clamp(1.1rem, 1.6vw, 1.55rem)",
+            fontSize: "clamp(1.35rem, 1.95vw, 1.9rem)",
           }}
         >
           &gt; {intro.tagline}
@@ -113,7 +113,7 @@ function IntroView({ intro }: { intro: IntroPayload }) {
             style={{
               color: "#f7e3d0",
               textShadow: `0 0 3px ${PHOSPHOR_GLOW}`,
-              fontSize: "clamp(1rem, 1.3vw, 1.25rem)",
+              fontSize: "clamp(1.25rem, 1.6vw, 1.55rem)",
             }}
           >
             {p}
@@ -122,7 +122,7 @@ function IntroView({ intro }: { intro: IntroPayload }) {
       </div>
 
       <p
-        className="mt-1 font-mono text-[13px] uppercase tracking-[0.24em]"
+        className="mt-1 font-mono text-[18px] uppercase tracking-[0.24em]"
         style={{ color: PHOSPHOR, opacity: 0.85 }}
       >
         ◂ Select a track from the playlist to inspect
@@ -152,8 +152,11 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
     [track.images, track.preview],
   );
   const slideImages = useMemo(
-    () => allImages.slice(0, SLIDE_LIMIT),
-    [allImages],
+    () =>
+      track.previewImages.length > 0
+        ? track.previewImages.slice(0, SLIDE_LIMIT)
+        : allImages.slice(0, SLIDE_LIMIT),
+    [track.previewImages, allImages],
   );
 
   const [idx, setIdx] = useState(0);
@@ -247,7 +250,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
 
       {slideImages.length > 1 && (
         <div
-          className="absolute right-3 top-3 rounded-md px-2.5 py-1 font-mono text-[12px] tabular-nums uppercase tracking-[0.18em]"
+          className="absolute right-3 top-3 rounded-md px-2.5 py-1 font-mono text-[14px] tabular-nums uppercase tracking-[0.18em]"
           style={{
             color: PHOSPHOR,
             background: "rgba(10,5,17,0.7)",
@@ -343,7 +346,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
               </h2>
               {tagLine && (
                 <p
-                  className="mt-2 font-mono text-[13px] uppercase tracking-[0.18em]"
+                  className="mt-2 font-mono text-[15px] uppercase tracking-[0.18em]"
                   style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
                 >
                   {tagLine}
@@ -353,11 +356,11 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
 
             {summary && (
               <p
-                className="font-pixel leading-snug"
+                className="font-sans leading-relaxed"
                 style={{
                   color: "#f7e3d0",
                   textShadow: `0 0 3px ${PHOSPHOR_GLOW}`,
-                  fontSize: "clamp(1rem, 1.25vw, 1.2rem)",
+                  fontSize: "clamp(1rem, 1.05vw, 1.125rem)",
                 }}
               >
                 {summary}
@@ -389,7 +392,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
           </h2>
           {tagLine && (
             <p
-              className="hidden truncate font-mono text-[12px] uppercase tracking-[0.18em] md:inline"
+              className="hidden truncate font-mono text-[14px] uppercase tracking-[0.18em] md:inline"
               style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
             >
               {tagLine}
@@ -398,11 +401,11 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
         </div>
         {summary && (
           <p
-            className="line-clamp-2 font-pixel leading-snug"
+            className="line-clamp-2 font-sans leading-relaxed"
             style={{
               color: "#f7e3d0",
               textShadow: `0 0 3px ${PHOSPHOR_GLOW}`,
-              fontSize: "clamp(0.95rem, 1.2vw, 1.2rem)",
+              fontSize: "clamp(1rem, 1.05vw, 1.125rem)",
             }}
           >
             {summary}

@@ -44,11 +44,11 @@ export default function CVPage() {
           }}
         >
           <header className="mb-8 border-b-2 border-code-text/30 pb-4">
-            <h1 className="font-pixel text-4xl leading-none text-code-text">
+            <h1 className="font-pixel text-5xl leading-none text-code-text">
               {cv.name}
             </h1>
-            <p className="mt-2 text-lg">{cv.title}</p>
-            <p className="mt-1 text-sm text-code-text/70">
+            <p className="mt-2 text-xl">{cv.title}</p>
+            <p className="mt-1 text-base text-code-text/70">
               <a className="underline hover:text-mauve" href={`mailto:${cv.email}`}>
                 {cv.email}
               </a>
@@ -88,7 +88,7 @@ export default function CVPage() {
                 {cv.skills.map((s) => (
                   <span
                     key={s}
-                    className="plum-outset bg-plum px-2 py-0.5 font-pixel text-sm leading-none text-code-text"
+                    className="plum-outset bg-plum px-2 py-0.5 font-pixel text-base leading-none text-code-text"
                   >
                     {s}
                   </span>
@@ -111,10 +111,10 @@ function Section({
 }) {
   return (
     <section className="mb-6">
-      <h2 className="mb-2 font-pixel text-2xl leading-none text-code-text">
+      <h2 className="mb-2 font-pixel text-3xl leading-none text-code-text">
         {title}
       </h2>
-      <div className="space-y-3 text-base leading-relaxed text-code-text/90">
+      <div className="space-y-3 text-lg leading-relaxed text-code-text/90">
         {children}
       </div>
     </section>
@@ -132,7 +132,7 @@ function Role({ role }: { role: RoleData }) {
           )}
         </h3>
         {role.period && (
-          <span className="font-mono text-sm text-code-text/60">{role.period}</span>
+          <span className="font-mono text-base text-code-text/60">{role.period}</span>
         )}
       </div>
       {role.bullets && role.bullets.length > 0 && (

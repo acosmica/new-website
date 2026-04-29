@@ -57,6 +57,7 @@ export type Experiment = {
   tags: string[];
   summary: string;
   preview?: string;
+  previewImages: string[];
   video?: string;
   images: string[];
   body: string[];
@@ -72,6 +73,7 @@ export const experiments: Experiment[] = readDir("projects").map(
     tags: (data.tags as string[]) ?? [],
     summary: (data.summary as string) ?? "",
     preview: data.preview as string | undefined,
+    previewImages: (data.previewImages as string[]) ?? [],
     video: data.video as string | undefined,
     images: (data.images as string[]) ?? [],
     body: paragraphs(content),

@@ -52,7 +52,7 @@ export default function ContactWindow({ open, onClose }: Props) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 12 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="plum-outset relative w-full max-w-md bg-plum text-code-text shadow-[6px_6px_0_rgba(0,0,0,0.5)]"
+            className="plum-outset relative w-full max-w-lg bg-plum text-code-text shadow-[6px_6px_0_rgba(0,0,0,0.5)]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="contact-title"
@@ -84,7 +84,7 @@ export default function ContactWindow({ open, onClose }: Props) {
               </div>
             </div>
 
-            <div className="plum-inset mx-2 mt-2 flex h-8 items-center bg-code-gutter px-2 font-pixel text-sm leading-none text-code-text/80">
+            <div className="plum-inset mx-2 mt-2 flex h-8 items-center bg-code-gutter px-2 font-pixel text-base leading-none text-code-text/80">
               <span className="truncate">To: lagesmica@gmail.com</span>
             </div>
 
@@ -94,7 +94,7 @@ export default function ContactWindow({ open, onClose }: Props) {
                   <p className="font-pixel text-3xl leading-tight text-code-text">
                     Say hi —
                   </p>
-                  <p className="text-sm leading-relaxed text-code-text/80">
+                  <p className="text-base leading-relaxed text-code-text/80">
                     I am open for jobs opportunities, freelance, creative
                     projects, all things magical — or if you just want to talk
                     about your favorite tv show.
@@ -139,7 +139,7 @@ export default function ContactWindow({ open, onClose }: Props) {
               <Field label="email">
                 <a
                   href="mailto:lagesmica@gmail.com"
-                  className="plum-outset inline-flex items-center gap-1.5 bg-plum px-2.5 py-1 font-mono text-sm text-[#ead9a0] hover:bg-plum-light/50"
+                  className="plum-outset inline-flex items-center gap-1.5 bg-plum px-2.5 py-1 font-mono text-base text-[#ead9a0] hover:bg-plum-light/50"
                 >
                   <span aria-hidden className="inline-block size-2 bg-sun pixelated" />
                   lagesmica@gmail.com
@@ -154,7 +154,7 @@ export default function ContactWindow({ open, onClose }: Props) {
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="plum-outset bg-plum px-2.5 py-1 font-pixel text-base leading-none text-code-text hover:bg-plum-light/50"
+                      className="plum-outset bg-plum px-2.5 py-1 font-pixel text-lg leading-none text-code-text hover:bg-plum-light/50"
                     >
                       {s.label}
                       <span className="ml-1 opacity-70" aria-hidden>↗</span>
@@ -202,7 +202,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <div className="font-pixel text-sm uppercase leading-none tracking-wider text-code-text/60">
+      <div className="font-pixel text-base uppercase leading-none tracking-wider text-code-text/60">
         {label}
       </div>
       {children}

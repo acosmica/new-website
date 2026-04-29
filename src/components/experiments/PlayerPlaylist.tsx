@@ -36,13 +36,13 @@ export default function PlayerPlaylist({
         }}
       >
         <span
-          className="font-mono text-[13px] uppercase tracking-[0.28em]"
+          className="font-mono text-[15px] uppercase tracking-[0.28em]"
           style={{ color: PHOSPHOR, textShadow: "0 0 6px rgba(242,201,168,0.7)" }}
         >
           ▣ Playlist
         </span>
         <span
-          className="font-mono text-[12px] uppercase tracking-[0.2em]"
+          className="font-mono text-[14px] uppercase tracking-[0.2em]"
           style={{ color: ACCENT }}
         >
           {experiments.length} tracks
@@ -88,7 +88,7 @@ export default function PlayerPlaylist({
                 <div className="flex items-baseline justify-between gap-3">
                   <div className="flex items-baseline gap-2 truncate">
                     <span
-                      className="font-mono text-[12px] tabular-nums"
+                      className="font-mono text-[14px] tabular-nums"
                       style={{
                         color: active ? PHOSPHOR : DIM,
                         textShadow: active ? "0 0 4px rgba(242,201,168,0.7)" : undefined,
@@ -98,7 +98,7 @@ export default function PlayerPlaylist({
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className="truncate font-mono text-[14px] uppercase tracking-[0.1em]"
+                      className="truncate font-mono text-[16px] uppercase tracking-[0.1em]"
                       style={{
                         color: active ? "#ffffff" : PHOSPHOR,
                         textShadow: active
@@ -112,7 +112,7 @@ export default function PlayerPlaylist({
                 </div>
                 {e.tags[0] && (
                   <p
-                    className="mt-0.5 truncate font-mono text-[12px] uppercase tracking-[0.18em]"
+                    className="mt-0.5 truncate font-mono text-[14px] uppercase tracking-[0.18em]"
                     style={{
                       color: active ? SOFT : DIM,
                       opacity: active ? 0.9 : 0.55,

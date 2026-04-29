@@ -22,7 +22,7 @@ export default function ContactPage() {
         title="Contact"
         fileName="new-message.eml"
         layoutId="folder-contact"
-        className="max-w-lg"
+        className="max-w-xl"
       >
         <div className="plum-inset flex h-9 items-center gap-3 bg-code-gutter px-3 font-pixel text-base text-code-text">
           <Link
@@ -34,10 +34,10 @@ export default function ContactPage() {
         </div>
 
         <div className="space-y-5 bg-chrome p-6">
-          <p className="font-pixel text-2xl leading-tight text-ink">
+          <p className="font-pixel text-3xl leading-tight text-ink">
             Say hi —
           </p>
-          <p className="text-base text-ink/85">
+          <p className="text-lg text-ink/85">
             Open to freelance briefs, collaborations, and friendly chats about
             motion, type, or color.
           </p>
@@ -45,7 +45,7 @@ export default function ContactPage() {
           <Field label="Email">
             <a
               href="mailto:b4rretto@gmail.com"
-              className="pixel-outset bg-chrome-light px-2 py-1 font-mono text-sm text-accent hover:bg-paper"
+              className="pixel-outset bg-chrome-light px-2 py-1 font-mono text-base text-accent hover:bg-paper"
             >
               b4rretto@gmail.com
             </a>
@@ -59,7 +59,7 @@ export default function ContactPage() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="pixel-outset bg-chrome-light px-2 py-0.5 font-pixel text-base text-ink hover:bg-paper"
+                  className="pixel-outset bg-chrome-light px-2 py-0.5 font-pixel text-lg text-ink hover:bg-paper"
                 >
                   {s.label} ↗
                 </a>
@@ -81,7 +81,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <div className="font-pixel text-base leading-none text-ink/60">
+      <div className="font-pixel text-lg leading-none text-ink/60">
         {label}
       </div>
       {children}

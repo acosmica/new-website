@@ -43,7 +43,7 @@ export default function ExperimentsPage() {
 
       <Link
         href="/"
-        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
+        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
       >
         <span aria-hidden>←</span> Back
       </Link>

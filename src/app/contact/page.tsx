@@ -22,7 +22,7 @@ export default function ContactPage() {
           backgroundImage: "url(/bg/acosmica.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "blur(18px) saturate(1.1)",
+          filter: "blur(1.125rem) saturate(1.1)",
           transform: "scale(1.1)",
         }}
       />

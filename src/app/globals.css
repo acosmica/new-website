@@ -66,6 +66,30 @@
   --shadow-pixel-lg: 8px 8px 0 0 var(--color-shadow);
 }
 
+/* ============================================================
+   Screen-resize scaling tokens
+   ------------------------------------------------------------
+   The retro-desktop composition is designed against an 1800px
+   baseline (MacBook Pro 14" "More Space" scaling). Below 1280px
+   the mobile pass takes over and these tokens stay at 1×. Between
+   1280px and 1800px the curve also stays at 1× (so the design
+   baseline anchors exactly at 1800px). Above 1800px the curve
+   ramps linearly until it caps at ~1.30× at 2400px viewport
+   width, preventing 4K/ultrawide from looking absurd.
+   ============================================================ */
+:root {
+  --scale: 1;
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --scale: clamp(1, calc(1 + (100vw - 1800px) / 2000), 1.3);
+  }
+  html {
+    font-size: calc(16px * var(--scale));
+  }
+}
+
 html,
 body {
   height: 100%;

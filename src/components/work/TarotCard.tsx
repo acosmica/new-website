@@ -62,7 +62,7 @@ export default function TarotCard({ project }: { project: Project }) {
 
       {/* Year top-right */}
       <div
-        className="absolute right-3 top-3 font-mono text-[12px] uppercase tracking-[0.18em] text-paper/85"
+        className="absolute right-3 top-3 font-mono text-[0.75rem] uppercase tracking-[0.18em] text-paper/85"
         style={{ textShadow: "0 1px 2px rgba(0,0,0,0.85)" }}
       >
         {project.year}
@@ -99,7 +99,7 @@ export default function TarotCard({ project }: { project: Project }) {
           const sub =
             project.subtitle !== undefined ? project.subtitle : project.tags[0];
           return sub ? (
-            <div className="mt-1 font-pixel text-[13px] uppercase tracking-wider text-paper/70">
+            <div className="mt-1 font-pixel text-[0.8125rem] uppercase tracking-wider text-paper/70">
               {sub}
             </div>
           ) : null;

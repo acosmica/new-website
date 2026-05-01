@@ -55,23 +55,23 @@ export default function MediaPlayer({
   const [introOpen, setIntroOpen] = useState(false);
 
   return (
-    <div className="relative w-full max-w-[1360px]">
+    <div className="relative w-full max-w-[85rem]">
       <div
         className="relative w-full"
         style={{
-          borderRadius: "28px",
+          borderRadius: "1.75rem",
           background:
             "linear-gradient(135deg, #f5eef3 0%, #d3c2d7 28%, #9d8aa8 58%, #5b4a72 82%, #2a1f3a 100%)",
           boxShadow:
             "inset 0 2px 0 rgba(255,255,255,0.95), inset 0 -3px 6px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.4), 0 30px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.6), 0 0 80px rgba(201,165,212,0.22)",
-          padding: "16px 18px 18px 18px",
+          padding: "1rem 1.125rem 1.125rem 1.125rem",
         }}
       >
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
-            borderRadius: "28px",
+            borderRadius: "1.75rem",
             background:
               "linear-gradient(118deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 28%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.10) 100%)",
           }}
@@ -92,13 +92,13 @@ export default function MediaPlayer({
             dropdown of the tab itself, not a separate box. */}
         <div
           id="experiments-intro-panel"
-          className={`relative z-10 min-h-[420px] md:hidden ${
+          className={`relative z-10 min-h-[26.25rem] md:hidden ${
             track && !introOpen ? "hidden" : ""
           }`}
           style={{
             marginTop: "-1px",
-            borderBottomLeftRadius: "10px",
-            borderBottomRightRadius: "10px",
+            borderBottomLeftRadius: "0.625rem",
+            borderBottomRightRadius: "0.625rem",
             overflow: "hidden",
           }}
         >
@@ -115,11 +115,11 @@ export default function MediaPlayer({
         >
           {/* Desktop display — always shows. On mobile this is hidden in
               favour of the inline preview inside the playlist below. */}
-          <div className="hidden min-h-[600px] md:block">
+          <div className="hidden min-h-[37.5rem] md:block">
             <PlayerDisplay intro={intro} track={track} playing={isPlaying} />
           </div>
 
-          <div className="min-h-[320px] md:min-h-[600px]">
+          <div className="min-h-[20rem] md:min-h-[37.5rem]">
             <PlayerPlaylist
               experiments={experiments}
               activeIndex={trackIndex}
@@ -181,8 +181,8 @@ function TitleBar({
           aria-hidden
           className="hidden shrink-0 rounded-full md:inline-block"
           style={{
-            width: "12px",
-            height: "12px",
+            width: "0.75rem",
+            height: "0.75rem",
             background:
               "conic-gradient(from 180deg, #ff7eb6, #c9a5d4, #f2c9a8, #ead9a0, #ff7eb6)",
             boxShadow:
@@ -190,13 +190,13 @@ function TitleBar({
           }}
         />
         <span
-          className="hidden truncate font-mono text-[15px] uppercase tracking-[0.28em] md:inline"
+          className="hidden truncate font-mono text-[0.9375rem] uppercase tracking-[0.28em] md:inline"
           style={{ color: "#f2c9a8", textShadow: "0 0 6px rgba(242,201,168,0.6)" }}
         >
           Experiments.wmp
         </span>
         <span
-          className="truncate font-mono text-[12px] uppercase tracking-[0.18em] md:hidden"
+          className="truncate font-mono text-[0.75rem] uppercase tracking-[0.18em] md:hidden"
           style={{ color: "#f2c9a8", textShadow: "0 0 6px rgba(242,201,168,0.6)" }}
         >
           Experiments.wmp
@@ -213,7 +213,7 @@ function TitleBar({
         </span>
         {isPlaying && trackTitle && (
           <span
-            className="hidden truncate font-mono text-[14px] uppercase tracking-[0.22em] md:inline"
+            className="hidden truncate font-mono text-[0.875rem] uppercase tracking-[0.22em] md:inline"
             style={{ color: "#ff7eb6" }}
           >
             ▶ {trackTitle}
@@ -229,7 +229,7 @@ function TitleBar({
   );
 
   const sharedClass =
-    "relative z-10 flex h-[36px] items-center justify-between rounded-[10px] px-4";
+    "relative z-10 flex h-[2.25rem] items-center justify-between rounded-[0.625rem] px-4";
   const sharedStyle: React.CSSProperties = {
     background:
       "linear-gradient(180deg, #3a2750 0%, #1f1238 60%, #120a1f 100%)",
@@ -304,16 +304,16 @@ function WinBtn({
       aria-hidden={onClick ? undefined : true}
       className="flex items-center justify-center"
       style={{
-        width: "20px",
-        height: "18px",
-        borderRadius: "5px",
+        width: "1.25rem",
+        height: "1.125rem",
+        borderRadius: "0.3125rem",
         background: hot
           ? "linear-gradient(180deg, #ff9eb8 0%, #d0412c 70%, #7a1f10 100%)"
           : "linear-gradient(180deg, #f5eef3 0%, #d3c2d7 60%, #8a7ca0 100%)",
         boxShadow:
           "inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.55)",
         color: hot ? "#fff" : "#1a0f2c",
-        fontSize: "11px",
+        fontSize: "0.6875rem",
         fontFamily: "var(--font-geist-mono), monospace",
         lineHeight: 1,
         cursor: onClick ? "pointer" : "default",

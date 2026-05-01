@@ -78,13 +78,15 @@ body {
 /* Once PixelCursor mounts, it adds this class so the native cursor hides
    only when the replacement is actually running. Without JS, the native
    cursor stays visible. */
-body.pixel-cursor-active {
-  cursor: none;
+body.pixel-cursor-active,
+body.pixel-cursor-active * {
+  cursor: none !important;
 }
 
 @media (hover: none) {
-  body.pixel-cursor-active {
-    cursor: auto;
+  body.pixel-cursor-active,
+  body.pixel-cursor-active * {
+    cursor: auto !important;
   }
 }
 

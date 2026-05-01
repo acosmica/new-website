@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useScale } from "@/lib/useScale";
 
 type PhraseDef = {
   text: string;
@@ -38,6 +39,9 @@ export default function HeroText() {
   // — no more "rewriting on top" ghost overlap.
   const [idx, setIdx] = useState(0);
   const [cycleKey, setCycleKey] = useState(0);
+  const scale = useScale();
+  const scaleRef = useRef(scale);
+  scaleRef.current = scale;
 
   const advance = () => {
     setIdx((current) => {
@@ -73,11 +77,12 @@ export default function HeroText() {
       if (!rotatorRef.current) return;
       // Mouse-right → camera orbits right → the hero plane at origin
       // appears turned to expose its left face: negative rotateY in CSS.
+      const s = scaleRef.current;
       const yaw = -cxv * HERO_MAX_YAW_DEG;
       const pitch = cyv * HERO_MAX_PITCH_DEG;
-      const px = cxv * HERO_MAX_TRANSLATE_X;
-      const py = cyv * HERO_MAX_TRANSLATE_Y;
-      const pz = -Math.abs(cxv) * HERO_MAX_TRANSLATE_Z;
+      const px = cxv * HERO_MAX_TRANSLATE_X * s;
+      const py = cyv * HERO_MAX_TRANSLATE_Y * s;
+      const pz = -Math.abs(cxv) * HERO_MAX_TRANSLATE_Z * s;
       // Keep the -50% centering baked in so we can own the full transform.
       rotatorRef.current.style.transform =
         `translate(-50%, -50%) translate3d(${px}px, ${py}px, ${pz}px) rotateY(${yaw}deg) rotateX(${pitch}deg)`;
@@ -111,7 +116,7 @@ export default function HeroText() {
     <div
       className="pointer-events-none absolute inset-0 z-20 select-none"
       style={{
-        perspective: "1100px",
+        perspective: "calc(1100px * var(--scale))",
         perspectiveOrigin: "50% 50%",
       }}
     >
@@ -172,7 +177,10 @@ function Phrase({
     >
       <div
         className="relative max-w-[90%]"
-        style={{ filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.3))" }}
+        style={{
+          filter:
+            "drop-shadow(0 calc(6px * var(--scale)) calc(20px * var(--scale)) rgba(0,0,0,0.3))",
+        }}
       >
         {/* Base layer — Dreamer TM regular, WHITE, generous spacing */}
         <div
@@ -199,7 +207,8 @@ function Phrase({
           style={{
             letterSpacing: "0.04em",
             fontWeight: 400,
-            transform: "translate(12px, 9px)",
+            transform:
+              "translate(calc(12px * var(--scale)), calc(9px * var(--scale)))",
           }}
         >
           {visible}
@@ -212,7 +221,8 @@ function Phrase({
           style={{
             letterSpacing: "0.04em",
             fontWeight: 400,
-            transform: "skew(-8deg) translate(18px, 4px)",
+            transform:
+              "skew(-8deg) translate(calc(18px * var(--scale)), calc(4px * var(--scale)))",
             animationDelay: "-6s",
           }}
         >

@@ -95,9 +95,9 @@ export default function AsciiFlower({
       className="pointer-events-none select-none font-mono leading-[0.95] tracking-[0.02em]"
       style={{
         color,
-        fontSize: "10px",
-        textShadow: `0 0 6px ${glowColor}, 0 0 2px rgba(255,255,255,0.9)`,
-        letterSpacing: "1px",
+        fontSize: "calc(10px * var(--scale))",
+        textShadow: `0 0 calc(6px * var(--scale)) ${glowColor}, 0 0 calc(2px * var(--scale)) rgba(255,255,255,0.9)`,
+        letterSpacing: "calc(1px * var(--scale))",
         margin: 0,
       }}
     >

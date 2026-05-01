@@ -102,7 +102,7 @@ export default function Tamagotchi({ open }: { open: boolean }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 8, scale: 0.96 }}
           transition={{ type: "spring", stiffness: 380, damping: 28 }}
-          className="plum-outset absolute bottom-12 right-0 z-[80] w-72 bg-plum text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.4)]"
+          className="plum-outset absolute bottom-12 right-0 z-[80] w-72 bg-plum text-code-text shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.4)]"
           role="dialog"
           aria-label="Pixel pet"
         >
@@ -118,7 +118,7 @@ export default function Tamagotchi({ open }: { open: boolean }) {
               aria-hidden
             />
             <span>pet.exe</span>
-            <span className="ml-auto text-[10px] font-mono uppercase tracking-wider opacity-75">
+            <span className="ml-auto text-[0.625rem] font-mono uppercase tracking-wider opacity-75">
               feeling {mood}
             </span>
           </div>
@@ -153,7 +153,7 @@ export default function Tamagotchi({ open }: { open: boolean }) {
             </AnimatePresence>
           </div>
 
-          <div className="mx-2 mb-2 space-y-1.5 font-pixel text-[11px] leading-none">
+          <div className="mx-2 mb-2 space-y-1.5 font-pixel text-[0.6875rem] leading-none">
             {(Object.keys(BAR_COLOR) as (keyof Needs)[]).map((k) => (
               <NeedBar
                 key={k}
@@ -170,7 +170,7 @@ export default function Tamagotchi({ open }: { open: boolean }) {
                 key={a.key}
                 type="button"
                 onClick={() => doAction(a.key, a.affects)}
-                className="plum-outset flex flex-col items-center gap-0.5 bg-plum py-1 font-pixel text-[10px] leading-none text-code-text hover:bg-plum-light/50 active:translate-y-[1px]"
+                className="plum-outset flex flex-col items-center gap-0.5 bg-plum py-1 font-pixel text-[0.625rem] leading-none text-code-text hover:bg-plum-light/50 active:translate-y-[1px]"
                 aria-label={`${a.label} the pet`}
               >
                 <span className="text-lg leading-none">{a.emoji}</span>

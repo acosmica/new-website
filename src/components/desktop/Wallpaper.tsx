@@ -64,7 +64,7 @@ export default function Wallpaper() {
           backgroundImage: "url(/bg/acosmica.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "blur(6px) saturate(1.05) contrast(1.02)",
+          filter: "blur(calc(6px * var(--scale))) saturate(1.05) contrast(1.02)",
           transform: "scale(1.28)",
         }}
       />

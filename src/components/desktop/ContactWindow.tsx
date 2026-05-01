@@ -51,7 +51,7 @@ export default function ContactWindow({ open, onClose }: Props) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 12 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="plum-outset relative w-full max-w-lg bg-plum text-code-text shadow-[6px_6px_0_rgba(0,0,0,0.5)]"
+            className="plum-outset relative w-full max-w-lg bg-plum text-code-text shadow-[0.375rem_0.375rem_0_rgba(0,0,0,0.5)]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="contact-title"
@@ -125,8 +125,8 @@ export default function ContactWindow({ open, onClose }: Props) {
                 {/* Small 3:4 portrait pinned to the window with a paper clip
                     drawn in SVG. Figure has a negative top margin so the
                     clip visibly overlaps the "To:" email bar above. */}
-                <figure className="relative -mt-8 w-[120px] shrink-0 translate-x-6 -rotate-3">
-                  <div className="plum-outset relative aspect-[3/4] overflow-hidden bg-paper shadow-[3px_4px_0_rgba(0,0,0,0.45)]">
+                <figure className="relative -mt-8 w-[7.5rem] shrink-0 translate-x-6 -rotate-3">
+                  <div className="plum-outset relative aspect-[3/4] overflow-hidden bg-paper shadow-[0.1875rem_0.25rem_0_rgba(0,0,0,0.45)]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="/contact/micaelle-photo.jpg"

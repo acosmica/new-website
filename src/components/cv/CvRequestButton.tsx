@@ -1,35 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
-import { requestFullCv } from "@/app/cv/actions";
+import { useEffect, useRef, useState } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 
-/**
- * Tiny "Request Full CV" affordance for the CV page toolbar. Click
- * the button → a popover slides down with an email input + submit.
- * Submission posts to a Server Action that appends the email to
- * `data/cv-requests.jsonl` for later follow-up.
- */
+const FORMSPREE_FORM_ID = "mpqbzojp";
+
 export default function CvRequestButton() {
   const [open, setOpen] = useState(false);
-  const [feedback, setFeedback] = useState<{
-    type: "ok" | "err";
-    text: string;
-  } | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [state, handleSubmit] = useForm(FORMSPREE_FORM_ID);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const popRef = useRef<HTMLDivElement | null>(null);
 
-  // Focus the input when the popover opens.
   useEffect(() => {
-    if (open) inputRef.current?.focus();
-  }, [open]);
+    if (open && !state.succeeded) inputRef.current?.focus();
+  }, [open, state.succeeded]);
 
-  const close = () => {
-    setOpen(false);
-    setFeedback(null);
-  };
+  const close = () => setOpen(false);
 
-  // Click outside / Escape to close.
   useEffect(() => {
     if (!open) return;
     const onClick = (e: MouseEvent) => {
@@ -49,23 +36,12 @@ export default function CvRequestButton() {
     };
   }, [open]);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    if (typeof navigator !== "undefined") {
-      data.set("ua", navigator.userAgent ?? "");
+  useEffect(() => {
+    if (state.succeeded) {
+      const t = window.setTimeout(() => close(), 2200);
+      return () => window.clearTimeout(t);
     }
-    startTransition(async () => {
-      const res = await requestFullCv(data);
-      if (res.ok) {
-        setFeedback({ type: "ok", text: res.message });
-        // Auto-close shortly after a successful submit.
-        window.setTimeout(() => close(), 1800);
-      } else {
-        setFeedback({ type: "err", text: res.message });
-      }
-    });
-  };
+  }, [state.succeeded]);
 
   return (
     <div ref={popRef} className="relative">
@@ -81,39 +57,63 @@ export default function CvRequestButton() {
         <div
           className="plum-outset absolute right-0 top-[calc(100%+6px)] z-30 w-[320px] bg-paper p-3 font-pixel text-base text-ink shadow-[4px_4px_0_rgba(0,0,0,0.45)]"
         >
-          <p className="mb-2 leading-snug">
-            Drop your email and I&apos;ll send the full CV.
-          </p>
-          <form onSubmit={onSubmit} className="flex flex-col gap-2">
-            <input
-              ref={inputRef}
-              type="email"
-              name="email"
-              required
-              autoComplete="email"
-              placeholder="you@somewhere.com"
-              disabled={pending}
-              className="plum-inset w-full bg-white px-2 py-1 font-mono text-sm text-ink outline-none placeholder:text-ink/40 disabled:opacity-60"
-            />
-            <button
-              type="submit"
-              disabled={pending}
-              className="plum-outset bg-peach px-2 py-1 text-ink hover:bg-blush disabled:cursor-wait disabled:opacity-70"
-            >
-              {pending ? "Sending…" : "Send"}
-            </button>
-          </form>
-          {feedback && (
+          {state.succeeded ? (
             <p
               role="status"
               aria-live="polite"
-              className="mt-2 text-sm leading-snug"
-              style={{
-                color: feedback.type === "ok" ? "#4a7a3e" : "#9d2a1f",
-              }}
+              className="leading-snug"
+              style={{ color: "#4a7a3e" }}
             >
-              {feedback.text}
+              Got it — I&apos;ll send the full CV to that address shortly.
             </p>
+          ) : (
+            <>
+              <p className="mb-2 leading-snug">
+                Drop your email and I&apos;ll send the full CV.
+              </p>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                <input
+                  type="text"
+                  name="_gotcha"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    width: "1px",
+                    height: "1px",
+                    opacity: 0,
+                    pointerEvents: "none",
+                  }}
+                />
+                <input
+                  ref={inputRef}
+                  id="email"
+                  type="email"
+                  name="email"
+                  required
+                  autoComplete="email"
+                  placeholder="you@somewhere.com"
+                  disabled={state.submitting}
+                  className="plum-inset w-full bg-white px-2 py-1 font-mono text-sm text-ink outline-none placeholder:text-ink/40 disabled:opacity-60"
+                />
+                <ValidationError
+                  prefix="Email"
+                  field="email"
+                  errors={state.errors}
+                  className="text-sm leading-snug"
+                  style={{ color: "#9d2a1f" }}
+                />
+                <button
+                  type="submit"
+                  disabled={state.submitting}
+                  className="plum-outset bg-peach px-2 py-1 text-ink hover:bg-blush disabled:cursor-wait disabled:opacity-70"
+                >
+                  {state.submitting ? "Sending…" : "Send"}
+                </button>
+              </form>
+            </>
           )}
         </div>
       )}

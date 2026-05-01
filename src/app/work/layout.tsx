@@ -6,10 +6,8 @@ import { getAllProjects } from "@/lib/projects";
 
 export default function WorkLayout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   const projects = getAllProjects();
   const allTags = Array.from(
@@ -43,10 +41,6 @@ export default function WorkLayout({
           </div>
         )}
       </Window>
-
-      {/* Parallel-slot modal — renders on top of the Window via the
-          /work/@modal/(.)[slug] intercepting route when a card is clicked */}
-      {modal}
     </div>
   );
 }

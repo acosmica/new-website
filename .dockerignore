@@ -1,0 +1,29 @@
+.git
+.gitignore
+node_modules
+.next
+out
+dist
+build
+
+# Editor / OS
+.DS_Store
+.vscode
+.idea
+*.swp
+
+# Notes / docs / specs not needed at build time
+*.md
+AGENTS.md
+CLAUDE.md
+README.md
+docs
+
+# Stray lockfile from a non-npm install attempt; keep only package-lock.json
+pnpm-lock.yaml
+
+# Stray media / personal files
+*.mov
+*.MOV
+*.mp4
+*.MP4

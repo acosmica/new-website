@@ -32,8 +32,12 @@ export default function StickyNote({
     <motion.div
       whileHover={{ rotate: rotate + 0.5, y: -3 }}
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      className={`note-shadow absolute select-none p-4 font-hand text-[22px] leading-tight text-ink ${BG[color]}`}
-      style={{ width, transform: `rotate(${rotate}deg)`, ...style }}
+      className={`note-shadow absolute select-none p-4 font-hand text-[1.375rem] leading-tight text-ink ${BG[color]}`}
+      style={{
+        width: `calc(${width}px * var(--scale))`,
+        transform: `rotate(${rotate}deg)`,
+        ...style,
+      }}
     >
       {children}
     </motion.div>

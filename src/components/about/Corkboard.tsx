@@ -42,7 +42,7 @@ const PAPER_STYLE: React.CSSProperties = {
   backgroundColor: "#cec2d2",
   backgroundImage: [
     // Clean 32px-period rule lines so bio text can sit exactly on them.
-    "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 32px)",
+    "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 2rem)",
     "linear-gradient(90deg, transparent calc(3.5rem - 1px), rgba(214, 133, 155, 0.7) calc(3.5rem - 1px), rgba(214, 133, 155, 0.7) calc(3.5rem + 1px), transparent calc(3.5rem + 1px))",
     "linear-gradient(112deg, transparent 0%, transparent 22%, rgba(0,0,0,0.06) 23%, transparent 24%, transparent 100%)",
     "linear-gradient(82deg, transparent 0%, transparent 55%, rgba(0,0,0,0.05) 56%, transparent 57%, transparent 100%)",
@@ -63,7 +63,7 @@ const PAPER_STYLE: React.CSSProperties = {
 const MOBILE_PAPER_STYLE: React.CSSProperties = {
   backgroundColor: "#cec2d2",
   backgroundImage: [
-    "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 32px)",
+    "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 2rem)",
     "linear-gradient(112deg, transparent 0%, transparent 22%, rgba(0,0,0,0.06) 23%, transparent 24%, transparent 100%)",
     "linear-gradient(82deg, transparent 0%, transparent 55%, rgba(0,0,0,0.05) 56%, transparent 57%, transparent 100%)",
     "linear-gradient(155deg, transparent 0%, transparent 72%, rgba(0,0,0,0.04) 73%, transparent 74%, transparent 100%)",
@@ -361,14 +361,14 @@ function WashiTape({
   };
   return (
     <div
-      className="pointer-events-none absolute z-[22] select-none font-hand text-[22px] leading-tight text-ink/80"
+      className="pointer-events-none absolute z-[22] select-none font-hand text-[1.375rem] leading-tight text-ink/80"
       style={{
-        width,
+        width: `calc(${width}px * var(--scale))`,
         background: STRIPE[color],
-        padding: "10px 16px",
+        padding: "0.625rem 1rem",
         transform: `rotate(${rotate}deg)`,
         boxShadow:
-          "1px 2px 0 rgba(0,0,0,0.08), 4px 7px 12px rgba(0,0,0,0.12)",
+          "1px 2px 0 rgba(0,0,0,0.08), 0.25rem 0.4375rem 0.75rem rgba(0,0,0,0.12)",
         ...style,
       }}
     >
@@ -388,13 +388,13 @@ export default function Corkboard() {
     // Outer scroll viewport — fixed to the window body area. Inner wrapper
     // is explicitly sized so absolute-positioned paper/spiral/content cover
     // the full scroll extent and move with the scroll.
-    <div className="relative h-[calc(100dvh-140px)] w-full overflow-y-auto overflow-x-hidden">
+    <div className="relative h-[calc(100dvh-8.75rem)] w-full overflow-y-auto overflow-x-hidden">
       <div
         className="relative w-full"
         style={
           isMobile
-            ? { minHeight: "calc(100dvh - 140px)" }
-            : { height: `${PAGE_HEIGHT}px` }
+            ? { minHeight: "calc(100dvh - 8.75rem)" }
+            : { height: `calc(${PAGE_HEIGHT}px * var(--scale))` }
         }
       >
       {/* Spiral binding + punched holes — desktop only. On mobile the page
@@ -416,7 +416,7 @@ export default function Corkboard() {
         className="pointer-events-none absolute inset-0 mix-blend-multiply opacity-[0.32]"
         style={{
           backgroundImage: PAPER_NOISE,
-          backgroundSize: "400px 400px",
+          backgroundSize: "25rem 25rem",
           ...(isMobile ? {} : {
             maskImage: HOLE_MASK,
             WebkitMaskImage: HOLE_MASK,
@@ -430,7 +430,7 @@ export default function Corkboard() {
         className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-[0.25]"
         style={{
           backgroundImage: PAPER_NOISE,
-          backgroundSize: "180px 180px",
+          backgroundSize: "11.25rem 11.25rem",
           ...(isMobile ? {} : {
             maskImage: HOLE_MASK,
             WebkitMaskImage: HOLE_MASK,
@@ -451,7 +451,7 @@ export default function Corkboard() {
           caption="mini mica, live-coded"
           rotate={5}
           size={320}
-          style={{ position: "absolute", top: "40px", right: "4%", zIndex: 30 }}
+          style={{ position: "absolute", top: "2.5rem", right: "4%", zIndex: 30 }}
         />
       )}
 
@@ -461,7 +461,7 @@ export default function Corkboard() {
           <StickyNote
             color="mauve"
             rotate={-4}
-            style={{ top: "24px", left: "6rem" }}
+            style={{ top: "1.5rem", left: "6rem" }}
             width={280}
           >
             Hi, I&apos;m Micaelle!
@@ -474,7 +474,7 @@ export default function Corkboard() {
           <StickyNote
             color="blush"
             rotate={3}
-            style={{ top: "760px", right: "3rem" }}
+            style={{ top: "47.5rem", right: "3rem" }}
             width={260}
           >
             currently obsessed with:
@@ -494,15 +494,15 @@ export default function Corkboard() {
         <div
           className="relative z-10 font-mono text-ink/85"
           style={{
-            // 32px paddingTop puts the first text line box exactly between
-            // the first and second rule line, so each baseline (≈24px from
-            // the top of its 32px line box) lands on a rule line below.
-            paddingTop: "32px",
+            // 2rem paddingTop puts the first text line box exactly between
+            // the first and second rule line, so each baseline (≈1.5rem from
+            // the top of its 2rem line box) lands on a rule line below.
+            paddingTop: "2rem",
             paddingLeft: "1.25rem",
             paddingRight: "1.25rem",
             paddingBottom: "3rem",
-            fontSize: "17px",
-            lineHeight: "32px",
+            fontSize: "1.0625rem",
+            lineHeight: "2rem",
             whiteSpace: "pre-wrap",
           }}
         >
@@ -511,11 +511,11 @@ export default function Corkboard() {
             className="float-right ml-3 mb-2"
             style={{
               transform: "rotate(5deg)",
-              filter: "drop-shadow(2px 3px 0 rgba(0,0,0,0.35))",
+              filter: "drop-shadow(0.125rem 0.1875rem 0 rgba(0,0,0,0.35))",
             }}
           >
             <div className="bg-paper p-1.5 pb-5">
-              <div className="relative aspect-square w-[160px] overflow-hidden bg-plum">
+              <div className="relative aspect-square w-[10rem] overflow-hidden bg-plum">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/about/me.jpg"
@@ -550,11 +550,11 @@ My energy also extends into community-building and education, being a former pro
           <div
             className="pointer-events-none absolute z-10 font-mono text-ink/85"
             style={{
-              top: "70px",
+              top: "4.375rem",
               left: "4rem",
               right: "calc(50% + 3.5rem)",
-              fontSize: "17px",
-              lineHeight: "32px",
+              fontSize: "1.0625rem",
+              lineHeight: "2rem",
               whiteSpace: "pre-wrap",
             }}
           >
@@ -563,7 +563,7 @@ My energy also extends into community-building and education, being a former pro
               style={{
                 float: "left",
                 width: "21rem",
-                height: "88px",
+                height: "5.5rem",
                 shapeOutside: "margin-box",
                 marginRight: "0.5rem",
               }}
@@ -582,11 +582,11 @@ As the founder and Creative Director of thecode, I’ve led the development of l
           <div
             className="pointer-events-none absolute z-10 font-mono text-ink/85"
             style={{
-              top: "70px",
+              top: "4.375rem",
               left: "calc(50% + 3.5rem)",
               right: "3rem",
-              fontSize: "17px",
-              lineHeight: "32px",
+              fontSize: "1.0625rem",
+              lineHeight: "2rem",
               whiteSpace: "pre-wrap",
             }}
           >
@@ -595,7 +595,7 @@ As the founder and Creative Director of thecode, I’ve led the development of l
               style={{
                 float: "right",
                 width: "22rem",
-                height: "410px",
+                height: "25.625rem",
                 shapeOutside: "margin-box",
                 marginLeft: "0.5rem",
               }}
@@ -617,8 +617,8 @@ My energy also extends into community-building and education, being a former pro
             rotate={-3}
             width={370}
             style={{
-              top: "400px",
-              right: "calc(4% - 25px)",
+              top: "25rem",
+              right: "calc(4% - 1.5625rem)",
               whiteSpace: "nowrap",
               zIndex: 40,
             }}
@@ -634,7 +634,7 @@ My energy also extends into community-building and education, being a former pro
 
           <div className="pointer-events-none absolute inset-0 z-10 font-hand text-2xl text-ink/60">
             <div
-              style={{ position: "absolute", top: "810px", left: "calc(50% + 4.5rem)" }}
+              style={{ position: "absolute", top: "50.625rem", left: "calc(50% + 4.5rem)" }}
               className="-rotate-3"
             >
               ~ keep making weird things

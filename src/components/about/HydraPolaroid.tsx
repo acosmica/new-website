@@ -485,14 +485,17 @@ export default function HydraPolaroid({
         style={{
           background:
             "radial-gradient(circle at 30% 30%, #fff 0%, #c9a5d4 40%, #7a4d94 100%)",
-          boxShadow: "1px 1px 3px rgba(0,0,0,0.5)",
+          boxShadow: "1px 1px calc(3px * var(--scale)) rgba(0,0,0,0.5)",
         }}
       />
 
-      <div className="bg-paper p-3 pb-8" style={{ width: size }}>
+      <div
+        className="bg-paper p-3 pb-8"
+        style={{ width: `calc(${size}px * var(--scale))` }}
+      >
         <div
           className="relative aspect-square w-full overflow-hidden bg-plum"
-          style={{ width: imgSize }}
+          style={{ width: `calc(${imgSize}px * var(--scale))` }}
         >
           <PortraitMedia src={src} size={imgSize} compiled={compiled} />
 
@@ -523,7 +526,7 @@ export default function HydraPolaroid({
           {/* Hydra-style code overlay */}
           <pre
             aria-hidden
-            className="pointer-events-none absolute inset-0 p-4 font-mono text-[13px] leading-relaxed"
+            className="pointer-events-none absolute inset-0 p-4 font-mono text-[0.8125rem] leading-relaxed"
             style={{
               color: TOKEN_COLOR.default,
               textShadow: "0 1px 2px rgba(0,0,0,0.9)",
@@ -544,8 +547,8 @@ export default function HydraPolaroid({
                       aria-hidden
                       className="inline-block align-middle"
                       style={{
-                        width: "7px",
-                        height: "14px",
+                        width: "0.4375rem",
+                        height: "0.875rem",
                         marginLeft: "1px",
                         background: TOKEN_COLOR.chain,
                         animation: "caret-blink 1s step-end infinite",
@@ -559,7 +562,7 @@ export default function HydraPolaroid({
 
           {/* Status badge */}
           <div
-            className="absolute top-2 right-2 flex items-center gap-1 bg-plum/80 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-code-text"
+            className="absolute top-2 right-2 flex items-center gap-1 bg-plum/80 px-1.5 py-0.5 font-mono text-[0.625rem] uppercase tracking-widest text-code-text"
             style={{ letterSpacing: "0.12em" }}
           >
             <span
@@ -631,7 +634,7 @@ function PortraitMedia({
             width: `${pixel}px`,
             height: `${pixel}px`,
             imageRendering: "pixelated",
-            transform: `scale(${scale})`,
+            transform: `scale(calc(${scale} * var(--scale)))`,
             transformOrigin: "top left",
             objectFit: "cover",
           }}

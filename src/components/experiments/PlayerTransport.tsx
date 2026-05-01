@@ -98,7 +98,7 @@ function Readout({
         {value}
       </span>
       <span
-        className="font-mono text-[10px] uppercase tracking-[0.18em]"
+        className="font-mono text-[12px] uppercase tracking-[0.18em]"
         style={{ color, opacity: 0.55 }}
       >
         / {sub}

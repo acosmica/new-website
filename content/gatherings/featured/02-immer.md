@@ -3,7 +3,7 @@ slug: immer
 title: IMMER
 eyebrow: "Festival ▸ Lead Producer"
 tagline: "An international new media & fulldome festival celebrating the vanguard of immersive storytelling."
-teaser: "Three editions of Brazil's only international fulldome & immersive-media festival — free public sessions, government grants, world-class artists."
+teaser: "Three editions of Brazil's only international fulldome & immersive-media festival — free public sessions with world-class artists supported by government grants."
 years: "2017 — 2024"
 location: "Salvador & Brasília — Brazil"
 role: "Lead Producer"
@@ -11,7 +11,6 @@ tags:
   - Fulldome
   - Immersive
   - Festival
-  - Public Funding
 hero: /gatherings/immer/immer01.jpg
 heroFocus: "50% 40%"
 heroSlides:

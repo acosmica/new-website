@@ -1,9 +1,9 @@
 "use client";
 
+import type { ReactNode } from "react";
 import type { Experiment } from "@/lib/experiments";
 
 const PHOSPHOR = "#f2c9a8";
-const ACCENT = "#ff7eb6";
 const SOFT = "#ead9a0";
 const DIM = "#9d8aa8";
 
@@ -11,10 +11,13 @@ export default function PlayerPlaylist({
   experiments,
   activeIndex,
   onSelect,
+  inlinePreview,
 }: {
   experiments: Experiment[];
   activeIndex: number | null;
   onSelect: (index: number) => void;
+  /** Optional preview rendered inline under the active row (mobile dropdown). */
+  inlinePreview?: ReactNode;
 }) {
   return (
     <div
@@ -29,23 +32,17 @@ export default function PlayerPlaylist({
     >
       {/* Header */}
       <div
-        className="relative z-10 flex items-center justify-between border-b border-white/10 px-4 py-2.5"
+        className="relative z-10 hidden items-center justify-between border-b border-white/10 px-4 py-2.5 md:flex"
         style={{
           background:
             "linear-gradient(180deg, rgba(58,39,80,0.6) 0%, rgba(31,18,56,0.4) 100%)",
         }}
       >
         <span
-          className="font-mono text-[13px] uppercase tracking-[0.28em]"
+          className="font-mono text-[15px] uppercase tracking-[0.28em]"
           style={{ color: PHOSPHOR, textShadow: "0 0 6px rgba(242,201,168,0.7)" }}
         >
           ▣ Playlist
-        </span>
-        <span
-          className="font-mono text-[12px] uppercase tracking-[0.2em]"
-          style={{ color: ACCENT }}
-        >
-          {experiments.length} tracks
         </span>
       </div>
 
@@ -88,17 +85,7 @@ export default function PlayerPlaylist({
                 <div className="flex items-baseline justify-between gap-3">
                   <div className="flex items-baseline gap-2 truncate">
                     <span
-                      className="font-mono text-[12px] tabular-nums"
-                      style={{
-                        color: active ? PHOSPHOR : DIM,
-                        textShadow: active ? "0 0 4px rgba(242,201,168,0.7)" : undefined,
-                        opacity: active ? 1 : 0.85,
-                      }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span
-                      className="truncate font-mono text-[14px] uppercase tracking-[0.1em]"
+                      className="truncate font-mono text-[16px] uppercase tracking-[0.1em]"
                       style={{
                         color: active ? "#ffffff" : PHOSPHOR,
                         textShadow: active
@@ -112,7 +99,7 @@ export default function PlayerPlaylist({
                 </div>
                 {e.tags[0] && (
                   <p
-                    className="mt-0.5 truncate font-mono text-[12px] uppercase tracking-[0.18em]"
+                    className="mt-0.5 truncate font-mono text-[14px] uppercase tracking-[0.18em]"
                     style={{
                       color: active ? SOFT : DIM,
                       opacity: active ? 0.9 : 0.55,
@@ -122,6 +109,12 @@ export default function PlayerPlaylist({
                   </p>
                 )}
               </button>
+              {/* Inline preview slot — appears as a dropdown under the
+                  active row on mobile (parent passes it wrapped with
+                  md:hidden so desktop's side display takes over). */}
+              {active && inlinePreview && (
+                <div className="mx-1 mb-3 mt-1">{inlinePreview}</div>
+              )}
             </li>
           );
         })}

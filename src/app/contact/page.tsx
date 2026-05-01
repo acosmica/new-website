@@ -6,23 +6,40 @@ export const metadata = {
 };
 
 const SOCIALS = [
-  { label: "Instagram", href: "https://instagram.com/" },
-  { label: "LinkedIn", href: "https://linkedin.com/" },
-  { label: "Behance", href: "https://behance.net/" },
+  { label: "Instagram", href: "https://www.instagram.com/acosmica" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/micaelle-lages-838015193/" },
 ];
 
 export default function ContactPage() {
   return (
     <div className="relative grid min-h-[100dvh] w-full place-items-center p-4 pb-16 md:p-8">
+      {/* Desktop wallpaper, blurred — same image as the home /bg/acosmica.jpg */}
+      <div aria-hidden className="fixed inset-0 -z-20 bg-[#2a1f2e]" />
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 desktop-dither opacity-70"
+        className="fixed inset-0 -z-10"
+        style={{
+          backgroundImage: "url(/bg/acosmica.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(18px) saturate(1.1)",
+          transform: "scale(1.1)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(18,10,31,0.55) 0%, rgba(18,10,31,0.25) 40%, rgba(18,10,31,0.6) 100%)",
+        }}
       />
       <Window
         title="Contact"
         fileName="new-message.eml"
         layoutId="folder-contact"
-        className="max-w-lg"
+        accent="plum"
+        className="max-w-xl"
       >
         <div className="plum-inset flex h-9 items-center gap-3 bg-code-gutter px-3 font-pixel text-base text-code-text">
           <Link
@@ -33,21 +50,18 @@ export default function ContactPage() {
           </Link>
         </div>
 
-        <div className="space-y-5 bg-chrome p-6">
-          <p className="font-pixel text-2xl leading-tight text-ink">
+        <div className="space-y-5 bg-plum p-6 text-code-text">
+          <p className="font-pixel text-3xl leading-tight text-code-text">
             Say hi —
-          </p>
-          <p className="text-base text-ink/85">
-            Open to freelance briefs, collaborations, and friendly chats about
-            motion, type, or color.
           </p>
 
           <Field label="Email">
             <a
-              href="mailto:b4rretto@gmail.com"
-              className="pixel-outset bg-chrome-light px-2 py-1 font-mono text-sm text-accent hover:bg-paper"
+              href="mailto:lagesmica@gmail.com"
+              className="plum-outset inline-flex items-center gap-1.5 bg-plum px-2.5 py-1 font-mono text-base text-[#ead9a0] hover:bg-plum-light/50"
             >
-              b4rretto@gmail.com
+              <span aria-hidden className="inline-block size-2 bg-sun pixelated" />
+              lagesmica@gmail.com
             </a>
           </Field>
 
@@ -59,9 +73,10 @@ export default function ContactPage() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="pixel-outset bg-chrome-light px-2 py-0.5 font-pixel text-base text-ink hover:bg-paper"
+                  className="plum-outset bg-plum px-2.5 py-1 font-pixel text-lg leading-none text-code-text hover:bg-plum-light/50"
                 >
-                  {s.label} ↗
+                  {s.label}
+                  <span className="ml-1 opacity-70" aria-hidden>↗</span>
                 </a>
               ))}
             </div>
@@ -81,7 +96,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <div className="font-pixel text-base leading-none text-ink/60">
+      <div className="font-pixel text-lg uppercase leading-none tracking-wider text-code-text/60">
         {label}
       </div>
       {children}

@@ -78,7 +78,7 @@ export default async function ProductionDetail({
               <span className="font-pixel text-sm uppercase leading-none tracking-[0.18em] text-paper/55">
                 Role ▸
               </span>
-              <span className="plum-outset bg-plum-light/30 px-2 py-0.5 font-pixel text-base leading-none text-paper">
+              <span className="rounded-full border border-paper/30 bg-plum-light/15 px-3 py-0.5 font-pixel text-base leading-none text-paper">
                 {data.role}
               </span>
             </div>
@@ -88,12 +88,14 @@ export default async function ProductionDetail({
               on the right. Sized so most pages fit in a single
               viewport without scrolling. */}
           <div className="grid items-start gap-8 px-6 py-8 md:grid-cols-[1fr_1.1fr] md:gap-12 md:px-12 md:py-10">
-            <div>
+            <div className="contents md:block">
               <p className="text-base leading-relaxed text-code-text/90 md:text-[1.05rem]">
                 {data.body}
               </p>
 
-              <div className="mt-8 border-t border-plum-light/40 pt-6">
+              {/* Back-to-gatherings — desktop: under the body in the left
+                  column. Mobile: rendered AFTER the image column below. */}
+              <div className="mt-8 hidden border-t border-plum-light/40 pt-6 md:block">
                 <Link
                   href="/gatherings"
                   className="plum-outset bg-plum px-3 py-1 font-pixel text-base leading-none text-mauve hover:bg-plum-light/50 hover:text-blush"
@@ -122,6 +124,17 @@ export default async function ProductionDetail({
                   />
                 </div>
               ))}
+            </div>
+
+            {/* Mobile-only back link — rendered after the image so it sits
+                at the very bottom of the page on phones. */}
+            <div className="mt-2 border-t border-plum-light/40 pt-6 md:hidden">
+              <Link
+                href="/gatherings"
+                className="plum-outset bg-plum px-3 py-1 font-pixel text-base leading-none text-mauve hover:bg-plum-light/50 hover:text-blush"
+              >
+                ← Back to Gatherings
+              </Link>
             </div>
           </div>
         </article>

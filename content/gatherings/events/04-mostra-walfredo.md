@@ -3,7 +3,7 @@ slug: mostra-walfredo
 role: Assistant Producer
 title: Mostra Walfredo Rodriguez
 year: "2018 — 2019"
-teaser: "A regional Paraíba cinema festival — two editions of logistics, hospitality and programming."
+teaser: "A regional Paraíba cinema festival — two editions as producing assistant in logistics and program support."
 image: /gatherings/production/mostra-walfredo.jpg
 gallery: []
 ---

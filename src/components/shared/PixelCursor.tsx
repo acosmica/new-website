@@ -1,15 +1,20 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 /**
  * Chunky pixel cursor that replaces the native cursor on desktop.
- * A short trail of fading clones follows the main cursor.
+ * A short trail of fading clones follows the main cursor. The home
+ * route gets the dramatic big/glowy variant; every other route uses
+ * the original smaller, calmer cursor.
  */
 export default function PixelCursor() {
   const mainRef = useRef<HTMLDivElement>(null);
   const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [enabled, setEnabled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   useEffect(() => {
     // Skip on touch devices — no cursor to replace.
@@ -65,20 +70,24 @@ export default function PixelCursor() {
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
       {Array.from({ length: 14 }).map((_, i) => {
         const t = i / 13; // 0 (closest to cursor) → 1 (tail end)
-        const size = 14 - t * 9; // 14px near head, ~5px at tail
-        const opacity = 0.75 * (1 - t); // fades out smoothly
+        const headSize = isHome ? 22 : 14;
+        const tailReduction = isHome ? 14 : 9;
+        const size = headSize - t * tailReduction;
+        const opacity = (isHome ? 0.85 : 0.75) * (1 - t);
         return (
           <div
             key={i}
             ref={(el) => {
               trailRefs.current[i] = el;
             }}
-            className="pointer-events-none absolute top-0 left-0 rounded-[2px] bg-mauve"
+            className="pointer-events-none absolute top-0 left-0 rounded-[3px] bg-mauve"
             style={{
               width: `${size}px`,
               height: `${size}px`,
               opacity,
-              boxShadow: "0 0 8px rgba(201,165,212,0.9), 0 0 16px rgba(201,165,212,0.55)",
+              boxShadow: isHome
+                ? "0 0 12px rgba(201,165,212,1), 0 0 24px rgba(255,126,182,0.7), 0 0 40px rgba(255,126,182,0.4)"
+                : "0 0 8px rgba(201,165,212,0.9), 0 0 16px rgba(201,165,212,0.55)",
             }}
           />
         );
@@ -87,26 +96,28 @@ export default function PixelCursor() {
         ref={mainRef}
         className="pointer-events-none absolute top-0 left-0 will-change-transform"
       >
-        <CursorArrow />
+        <CursorArrow big={isHome} />
       </div>
     </div>
   );
 }
 
-function CursorArrow() {
-  // 8-bit style arrow — larger and brighter, with a sun-yellow glow so it
-  // stays legible over the busy wallpaper and floating panels.
+function CursorArrow({ big }: { big: boolean }) {
+  // 8-bit style arrow. `big` mode (home page only) is dramatically
+  // larger with a triple-stack glow; otherwise renders the original
+  // small/restrained variant used on the rest of the site.
   return (
     <svg
-      width="32"
-      height="38"
+      width={big ? 48 : 32}
+      height={big ? 58 : 38}
       viewBox="0 0 20 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         shapeRendering: "crispEdges",
-        filter:
-          "drop-shadow(0 0 4px rgba(201,165,212,0.95)) drop-shadow(0 0 10px rgba(201,165,212,0.6))",
+        filter: big
+          ? "drop-shadow(0 0 6px rgba(255,249,214,1)) drop-shadow(0 0 14px rgba(201,165,212,0.95)) drop-shadow(0 0 28px rgba(255,126,182,0.7))"
+          : "drop-shadow(0 0 4px rgba(201,165,212,0.95)) drop-shadow(0 0 10px rgba(201,165,212,0.6))",
       }}
     >
       <path

@@ -82,11 +82,6 @@ export default function MiniWindow({
             <span className="truncate text-xs opacity-75">— {fileName}</span>
           )}
         </span>
-        <div className="flex items-center gap-0.5">
-          <Btn label="_" v={variant} />
-          <Btn label="▢" v={variant} />
-          <Btn label="✕" v={variant} hot />
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col">{children}</div>

@@ -34,7 +34,7 @@ export default function EducationalDetail({ entry }: { entry: EducationalEntry }
         <span aria-hidden>←</span> Back
       </Link>
 
-      <main className="mx-auto max-w-[60rem] px-4 py-16 md:px-10 md:py-24">
+      <main className="mx-auto max-w-[88rem] px-4 py-16 md:px-10 md:py-20">
         <article className="plum-outset bg-plum text-code-text shadow-[10px_12px_0_rgba(0,0,0,0.45)]">
           <div
             className="flex h-9 items-center gap-2 px-1.5 text-code-text"
@@ -51,13 +51,8 @@ export default function EducationalDetail({ entry }: { entry: EducationalEntry }
           </div>
 
           <div className="border-b border-plum-light/40 px-5 py-4 md:px-8 md:py-5">
-            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <span className="plum-outset bg-hot px-2 py-0.5 font-pixel text-sm leading-none text-paper">
-                {entry.year}
-              </span>
-              <span className="font-pixel text-sm uppercase tracking-[0.18em] text-paper/55">
-                {entry.kind}
-              </span>
+            <div className="font-pixel text-sm uppercase leading-none tracking-[0.18em] text-paper/55">
+              {entry.kind} | {entry.year}
             </div>
             <h1
               className="mt-2 font-pixel text-3xl leading-tight text-paper md:text-4xl"
@@ -70,43 +65,64 @@ export default function EducationalDetail({ entry }: { entry: EducationalEntry }
             </span>
           </div>
 
-          <div className="grid items-start gap-6 px-5 py-5 md:grid-cols-[1fr_1.05fr] md:gap-8 md:px-8 md:py-7">
-            <div>
-              <p className="text-base leading-relaxed text-code-text/90 md:text-[1.05rem]">
-                {entry.body}
-              </p>
-              {entry.link && (
-                <a
-                  href={entry.link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="plum-outset mt-4 inline-block bg-plum-light/30 px-3 py-1 font-pixel text-base leading-none text-mauve hover:bg-plum-light/50 hover:text-blush"
-                >
-                  {entry.link.label} →
-                </a>
-              )}
-            </div>
+          {/* Media first, image-dominant — full content width. Optional
+              YouTube embed renders at the top, then any still images. */}
+          <div className="flex flex-col gap-4 px-3 py-5 md:px-6 md:py-7">
+            {entry.video && (
+              <div
+                className="plum-inset relative w-full overflow-hidden bg-plum-dark"
+                style={{ aspectRatio: "16 / 9" }}
+              >
+                <iframe
+                  src={`https://www.youtube.com/embed/${entry.video.youtubeId}?rel=0&modestbranding=1${
+                    entry.video.startSeconds
+                      ? `&start=${entry.video.startSeconds}`
+                      : ""
+                  }`}
+                  title={entry.title}
+                  loading="lazy"
+                  allow="accelerated-2d-canvas; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full"
+                />
+              </div>
+            )}
 
-            <div className="flex flex-col gap-3">
-              {entry.images.map((src, i) => (
-                <div key={i} className="plum-inset overflow-hidden bg-plum-dark">
-                  <Image
-                    src={src}
-                    alt=""
-                    width={1600}
-                    height={1200}
-                    sizes="(max-width: 768px) 100vw, 32vw"
-                    className="block h-auto w-full"
-                  />
-                </div>
-              ))}
-            </div>
+            {entry.images.map((src, i) => (
+              <div key={i} className="plum-inset overflow-hidden bg-plum-dark">
+                <Image
+                  src={src}
+                  alt=""
+                  width={2400}
+                  height={1600}
+                  sizes="(max-width: 768px) 100vw, 70vw"
+                  className="block h-auto w-full"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Body + action buttons */}
+          <div className="border-t border-plum-light/40 px-5 py-5 md:px-8 md:py-7">
+            <p className="max-w-[60rem] text-base leading-relaxed text-code-text/90 md:text-[1.05rem]">
+              {entry.body}
+            </p>
+            {entry.link && (
+              <a
+                href={entry.link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="plum-outset mt-5 inline-block bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50"
+              >
+                {entry.link.label} →
+              </a>
+            )}
           </div>
 
           <div className="border-t border-plum-light/40 px-5 py-4 md:px-8 md:py-5">
             <Link
               href="/gatherings"
-              className="plum-outset inline-block bg-plum-light/30 px-3 py-1 font-pixel text-base leading-none text-mauve hover:bg-plum-light/50 hover:text-blush"
+              className="plum-outset inline-block bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50"
             >
               ← Back to Gatherings
             </Link>

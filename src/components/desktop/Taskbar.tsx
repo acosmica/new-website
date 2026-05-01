@@ -20,11 +20,12 @@ function resolveTitle(pathname: string): string {
 
 export default function Taskbar() {
   const pathname = usePathname();
-  const [time, setTime] = useState<string>(() => formatNow());
+  const [time, setTime] = useState<string>("--:--");
   const [petOpen, setPetOpen] = useState(false);
   const petRootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setTime(formatNow());
     const id = setInterval(() => setTime(formatNow()), 1000 * 15);
     return () => clearInterval(id);
   }, []);
@@ -66,7 +67,7 @@ export default function Taskbar() {
 
       {!isHome && (
         <div
-          className="plum-inset flex h-8 items-center gap-2 bg-code-gutter px-2 font-pixel text-lg leading-none text-code-text"
+          className="plum-inset hidden h-8 items-center gap-2 bg-code-gutter px-2 font-pixel text-lg leading-none text-code-text sm:flex"
           aria-current="page"
         >
           <span className="inline-block size-3 bg-sun pixelated" aria-hidden />
@@ -95,7 +96,7 @@ export default function Taskbar() {
             <span aria-hidden className="text-xl leading-none text-[#efb3c3]">
               ♥
             </span>
-            <span className="text-base uppercase tracking-widest">PET</span>
+            <span className="hidden text-base uppercase tracking-widest sm:inline">PET</span>
           </button>
           <Tamagotchi open={petOpen} />
         </div>

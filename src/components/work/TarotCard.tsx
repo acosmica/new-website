@@ -92,11 +92,18 @@ export default function TarotCard({ project }: { project: Project }) {
         >
           {project.title}
         </h3>
-        {(project.subtitle || project.tags[0]) && (
-          <div className="mt-1 font-pixel text-[13px] uppercase tracking-wider text-paper/70">
-            {project.subtitle ?? project.tags[0]}
-          </div>
-        )}
+        {(() => {
+          // subtitle === undefined → fall back to first tag.
+          // subtitle === "" → explicit suppression, render nothing.
+          // subtitle set → use it.
+          const sub =
+            project.subtitle !== undefined ? project.subtitle : project.tags[0];
+          return sub ? (
+            <div className="mt-1 font-pixel text-[13px] uppercase tracking-wider text-paper/70">
+              {sub}
+            </div>
+          ) : null;
+        })()}
       </div>
 
       {/* Hover glow — inset highlight when pointer enters */}

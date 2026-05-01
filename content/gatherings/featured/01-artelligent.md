@@ -10,8 +10,7 @@ role: "Co-Founder · Lead Producer"
 tags:
   - AI
   - Festival
-  - Curation
-  - CAIXA Cultural
+  - Gallery Art
 hero: /gatherings/artelligent/artelligent01.jpg
 heroFocus: "50% 40%"
 heroSlides:

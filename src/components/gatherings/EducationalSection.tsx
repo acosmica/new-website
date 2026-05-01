@@ -55,13 +55,8 @@ export default function EducationalSection({
                     className="block h-auto w-full"
                   />
                 </div>
-                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span className="plum-outset bg-hot px-1.5 py-0.5 font-pixel text-sm leading-none text-paper">
-                    {e.year}
-                  </span>
-                  <span className="font-pixel text-sm uppercase tracking-[0.16em] text-paper/55">
-                    {e.kind}
-                  </span>
+                <div className="font-pixel text-sm uppercase leading-none tracking-[0.16em] text-paper/55">
+                  {e.kind} | {e.year}
                 </div>
                 <h3 className="mt-2 font-pixel text-xl leading-tight text-paper">
                   {e.title}

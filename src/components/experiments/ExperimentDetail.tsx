@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Experiment } from "@/lib/experiments";
@@ -15,10 +16,16 @@ type GalleryConfig = {
   rows?: number[];
   noCrop?: boolean;
   order?: number[];
+  rowCaptions?: string[];
 };
 
 const galleryConfig: Record<string, GalleryConfig> = {
-  "ai-fashion": { gridCols: 3, max: 6, gridAspect: "3 / 4" },
+  "ai-fashion": {
+    gridCols: 3,
+    max: 6,
+    gridAspect: "3 / 4",
+    rowCaptions: ["ORIGINAL IMAGE", "GENERATED CLOTHING", "FINAL GEN-AI OUTPUT"],
+  },
   fulldome: { gridCols: 2, noCrop: true },
   fabrication: { rows: [3, 2, 3, 3, 2, 3], gridAspect: "4 / 3" },
   "live-coding": { rows: [3, 3], gridAspect: "4 / 3" },
@@ -54,7 +61,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
   }
 
   return (
-    <div className="relative min-h-[100dvh] w-full overflow-x-hidden bg-black">
+    <div className="relative h-[100dvh] w-full overflow-y-auto overflow-x-hidden bg-black">
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-10"
@@ -83,27 +90,16 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
 
       <Link
         href="/experiments"
-        className="fixed left-4 top-4 z-50 inline-flex items-center gap-2 font-mono uppercase tracking-[0.22em] outline-none md:left-6 md:top-6"
-        style={{
-          padding: "8px 14px",
-          borderRadius: "999px",
-          background:
-            "linear-gradient(180deg, #f5eef3 0%, #d3c2d7 60%, #8a7ca0 100%)",
-          color: "#1a0f2c",
-          fontSize: "12px",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.45)",
-        }}
+        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
       >
-        <span aria-hidden>◄</span> Back to Player
+        <span aria-hidden>←</span> Back
       </Link>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col px-4 py-12 md:px-8 md:py-16">
+      <main className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col px-2 py-14 md:px-8 md:py-16">
         <article
-          className="relative flex w-full flex-col overflow-hidden"
+          className="relative flex w-full flex-col overflow-hidden p-2 md:p-[16px_18px_18px_18px]"
           style={{
             borderRadius: "28px",
-            padding: "16px 18px 18px 18px",
             background:
               "linear-gradient(135deg, #f5eef3 0%, #d3c2d7 28%, #9d8aa8 58%, #5b4a72 82%, #2a1f3a 100%)",
             boxShadow:
@@ -133,13 +129,19 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                 }}
               />
               <span
-                className="shrink-0 font-mono text-[13px] uppercase tracking-[0.28em]"
+                className="hidden shrink-0 font-mono text-[15px] uppercase tracking-[0.28em] md:inline"
                 style={{ color: PHOSPHOR, textShadow: `0 0 6px ${PHOSPHOR_GLOW}` }}
               >
-                Mica Lages — Experiments.wmp
+                Experiments.wmp
               </span>
               <span
-                className="hidden truncate font-mono text-[12px] uppercase tracking-[0.22em] md:inline"
+                className="shrink-0 truncate font-mono text-[12px] uppercase tracking-[0.18em] md:hidden"
+                style={{ color: PHOSPHOR, textShadow: `0 0 6px ${PHOSPHOR_GLOW}` }}
+              >
+                Experiments.wmp
+              </span>
+              <span
+                className="truncate font-mono text-[14px] uppercase tracking-[0.22em] md:text-[14px]"
                 style={{ color: ACCENT }}
               >
                 ▸ {track.title}
@@ -157,17 +159,8 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                 "inset 0 0 0 2px #1a0f2c, inset 0 0 0 4px #6a4f7e, inset 0 0 30px rgba(242,201,168,0.18), 0 0 0 1px rgba(0,0,0,0.6)",
             }}
           >
-            <div className="flex w-full flex-col gap-7 px-6 py-8 md:px-10 md:py-10">
-              <header className="flex flex-col gap-3">
-                <p
-                  className="font-mono text-[13px] uppercase tracking-[0.28em]"
-                  style={{
-                    color: ACCENT,
-                    textShadow: "0 0 6px rgba(255,126,182,0.55)",
-                  }}
-                >
-                  ▸ {track.year || "Experiment"}
-                </p>
+            <div className="flex w-full flex-col gap-7 px-2 py-6 md:px-10 md:py-10">
+              <header className="flex flex-col gap-3 px-3 pt-3 md:px-0 md:pt-0">
                 <h1
                   className="font-pixel uppercase leading-[0.95]"
                   style={{
@@ -180,7 +173,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                 </h1>
                 {tagLine && (
                   <p
-                    className="font-mono text-[13px] uppercase tracking-[0.2em]"
+                    className="font-mono text-[15px] uppercase tracking-[0.2em]"
                     style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
                   >
                     {tagLine}
@@ -189,15 +182,15 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
               </header>
 
               {track.body.length > 0 && (
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 px-3 md:px-0">
                   {track.body.map((p, i) => (
                     <p
                       key={i}
-                      className="font-pixel leading-relaxed"
+                      className="font-sans leading-relaxed"
                       style={{
                         color: "#f7e3d0",
                         textShadow: `0 0 3px ${PHOSPHOR_GLOW}`,
-                        fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
+                        fontSize: "clamp(1rem, 1.05vw, 1.125rem)",
                       }}
                     >
                       {p}
@@ -212,46 +205,68 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                     {rowChunks.map((row, rowIdx) => (
                       <div
                         key={rowIdx}
-                        className="grid gap-4"
-                        style={{
-                          gridTemplateColumns: `repeat(${row.length}, minmax(0, 1fr))`,
-                        }}
+                        className="grid grid-cols-1 gap-4 md:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]"
+                        style={
+                          { "--cols": row.length } as React.CSSProperties
+                        }
                       >
                         {row.map((src, i) => (
-                          <figure
-                            key={src + i}
-                            className="relative w-full overflow-hidden"
-                            style={{
-                              aspectRatio: cfg.gridAspect ?? "4 / 3",
-                              borderRadius: "10px",
-                              boxShadow:
-                                "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
-                              background: "#0a0511",
-                            }}
-                          >
-                            <Image
-                              src={src}
-                              alt={`${track.title} — image ${i + 1}`}
-                              fill
-                              sizes={
-                                row.length >= 3
-                                  ? "(max-width: 768px) 30vw, 260px"
-                                  : "(max-width: 768px) 45vw, 380px"
-                              }
-                              className="object-cover"
-                              style={{ filter: "saturate(1.05) contrast(1.05)" }}
-                            />
-                          </figure>
+                          <Fragment key={src + i}>
+                            {/* Mobile: natural aspect, full width, no crop */}
+                            <figure
+                              className="relative w-full overflow-hidden md:hidden"
+                              style={{
+                                borderRadius: "10px",
+                                boxShadow:
+                                  "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
+                                background: "#0a0511",
+                              }}
+                            >
+                              <Image
+                                src={src}
+                                alt={`${track.title} — image ${i + 1}`}
+                                width={1600}
+                                height={1200}
+                                sizes="100vw"
+                                className="block h-auto w-full"
+                                style={{ filter: "saturate(1.05) contrast(1.05)" }}
+                              />
+                            </figure>
+                            {/* Desktop: cropped to gridAspect */}
+                            <figure
+                              className="relative hidden w-full overflow-hidden md:block"
+                              style={{
+                                aspectRatio: cfg.gridAspect ?? "4 / 3",
+                                borderRadius: "10px",
+                                boxShadow:
+                                  "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
+                                background: "#0a0511",
+                              }}
+                            >
+                              <Image
+                                src={src}
+                                alt={`${track.title} — image ${i + 1}`}
+                                fill
+                                sizes={
+                                  row.length >= 3
+                                    ? "(max-width: 768px) 30vw, 260px"
+                                    : "(max-width: 768px) 45vw, 380px"
+                                }
+                                className="object-cover"
+                                style={{ filter: "saturate(1.05) contrast(1.05)" }}
+                              />
+                            </figure>
+                          </Fragment>
                         ))}
                       </div>
                     ))}
                   </div>
                 ) : cfg.gridCols ? (
                   <div
-                    className="grid items-start gap-4"
-                    style={{
-                      gridTemplateColumns: `repeat(${cfg.gridCols}, minmax(0, 1fr))`,
-                    }}
+                    className="grid grid-cols-1 items-start gap-4 md:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]"
+                    style={
+                      { "--cols": cfg.gridCols } as React.CSSProperties
+                    }
                   >
                     {allImages.map((src, i) =>
                       cfg.noCrop ? (
@@ -276,29 +291,62 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                           />
                         </figure>
                       ) : (
-                        <figure
-                          key={src + i}
-                          className="relative w-full overflow-hidden"
-                          style={{
-                            aspectRatio: cfg.gridAspect ?? "3 / 4",
-                            borderRadius: "10px",
-                            boxShadow:
-                              "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
-                            background: "#0a0511",
-                          }}
-                        >
-                          <Image
-                            src={src}
-                            alt={`${track.title} — image ${i + 1}`}
-                            fill
-                            sizes={
-                              cfg.gridCols && cfg.gridCols >= 3
-                                ? "(max-width: 768px) 30vw, 240px"
-                                : "(max-width: 768px) 45vw, 380px"
-                            }
-                            className="object-cover"
-                            style={{ filter: "saturate(1.05) contrast(1.05)" }}
-                          />
+                        <figure key={src + i} className="flex flex-col gap-2">
+                          {/* Mobile: natural aspect (no crop), full width */}
+                          <div
+                            className="relative w-full overflow-hidden md:hidden"
+                            style={{
+                              borderRadius: "10px",
+                              boxShadow:
+                                "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
+                              background: "#0a0511",
+                            }}
+                          >
+                            <Image
+                              src={src}
+                              alt={`${track.title} — image ${i + 1}`}
+                              width={1600}
+                              height={1200}
+                              sizes="100vw"
+                              className="block h-auto w-full"
+                              style={{ filter: "saturate(1.05) contrast(1.05)" }}
+                            />
+                          </div>
+                          {/* Desktop: cropped to gridAspect */}
+                          <div
+                            className="relative hidden w-full overflow-hidden md:block"
+                            style={{
+                              aspectRatio: cfg.gridAspect ?? "3 / 4",
+                              borderRadius: "10px",
+                              boxShadow:
+                                "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
+                              background: "#0a0511",
+                            }}
+                          >
+                            <Image
+                              src={src}
+                              alt={`${track.title} — image ${i + 1}`}
+                              fill
+                              sizes={
+                                cfg.gridCols && cfg.gridCols >= 3
+                                  ? "(max-width: 768px) 30vw, 240px"
+                                  : "(max-width: 768px) 45vw, 380px"
+                              }
+                              className="object-cover"
+                              style={{ filter: "saturate(1.05) contrast(1.05)" }}
+                            />
+                          </div>
+                          {cfg.rowCaptions && cfg.gridCols && (
+                            <figcaption
+                              className="text-center font-mono text-[12px] uppercase tracking-[0.22em]"
+                              style={{
+                                color: PHOSPHOR,
+                                textShadow: `0 0 4px ${PHOSPHOR_GLOW}`,
+                              }}
+                            >
+                              {cfg.rowCaptions[i % cfg.gridCols]}
+                            </figcaption>
+                          )}
                         </figure>
                       ),
                     )}

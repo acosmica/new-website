@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function ExperimentsPage() {
   return (
-    <div className="relative min-h-[100dvh] w-full overflow-hidden bg-black">
+    <div className="relative h-[100dvh] w-full overflow-y-auto overflow-x-hidden bg-black md:h-auto md:min-h-[100dvh] md:overflow-hidden">
       {/* Holographic Y2K backdrop — radial cyan→magenta wash with a faint
           scanline veil so the chrome player floats over a CRT desktop. */}
       <div
@@ -28,7 +28,9 @@ export default function ExperimentsPage() {
             "radial-gradient(circle at 75% 80%, rgba(255,126,182,0.18) 0%, transparent 45%)",
         }}
       />
-      <AsciiBackdrop />
+      <div className="hidden md:contents">
+        <AsciiBackdrop />
+      </div>
 
       <div
         aria-hidden
@@ -41,12 +43,12 @@ export default function ExperimentsPage() {
 
       <Link
         href="/"
-        className="pixel-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-paper px-3 py-1.5 font-pixel text-base leading-none text-ink shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-peach md:left-6 md:top-6"
+        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
       >
-        <span aria-hidden>←</span> Desktop
+        <span aria-hidden>←</span> Back
       </Link>
 
-      <main className="relative z-10 flex min-h-[100dvh] w-full items-center justify-center px-3 py-6 md:px-5 md:py-8">
+      <main className="relative z-10 flex min-h-[100dvh] w-full items-start justify-center px-3 py-6 pt-16 md:items-center md:px-5 md:py-8 md:pt-8">
         <MediaPlayer experiments={experiments} intro={intro} />
       </main>
     </div>

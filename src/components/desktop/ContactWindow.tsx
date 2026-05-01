@@ -4,9 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 const SOCIALS = [
-  { label: "Instagram", href: "https://instagram.com/" },
-  { label: "LinkedIn", href: "https://linkedin.com/" },
-  { label: "Behance", href: "https://behance.net/" },
+  { label: "Instagram", href: "https://www.instagram.com/acosmica" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/micaelle-lages-838015193/" },
 ];
 
 type Props = { open: boolean; onClose: () => void };
@@ -52,7 +51,7 @@ export default function ContactWindow({ open, onClose }: Props) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 12 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="plum-outset relative w-full max-w-md bg-plum text-code-text shadow-[6px_6px_0_rgba(0,0,0,0.5)]"
+            className="plum-outset relative w-full max-w-lg bg-plum text-code-text shadow-[6px_6px_0_rgba(0,0,0,0.5)]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="contact-title"
@@ -84,27 +83,49 @@ export default function ContactWindow({ open, onClose }: Props) {
               </div>
             </div>
 
-            <div className="plum-inset mx-2 mt-2 flex h-8 items-center bg-code-gutter px-2 font-pixel text-sm leading-none text-code-text/80">
+            <div className="plum-inset mx-2 mt-2 flex h-8 items-center bg-code-gutter px-2 font-pixel text-base leading-none text-code-text/80">
               <span className="truncate">To: lagesmica@gmail.com</span>
             </div>
 
-            <div className="space-y-5 p-6 pt-6">
-              <div className="flex items-start gap-4">
-                <div className="flex-1 space-y-3">
-                  <p className="font-pixel text-3xl leading-tight text-code-text">
+            <div className="p-6 pt-6">
+              <div className="flex items-start gap-5">
+                <div className="flex-1 space-y-5">
+                  <p className="font-pixel text-4xl leading-tight text-code-text">
                     Say hi —
                   </p>
-                  <p className="text-sm leading-relaxed text-code-text/80">
-                    I am open for jobs opportunities, freelance, creative
-                    projects, all things magical — or if you just want to talk
-                    about your favorite tv show.
-                  </p>
+
+                  <Field label="email">
+                    <a
+                      href="mailto:lagesmica@gmail.com"
+                      className="plum-outset inline-flex items-center gap-1.5 bg-plum px-2.5 py-1 font-mono text-base text-[#ead9a0] hover:bg-plum-light/50"
+                    >
+                      <span aria-hidden className="inline-block size-2 bg-sun pixelated" />
+                      lagesmica@gmail.com
+                    </a>
+                  </Field>
+
+                  <Field label="find me at:">
+                    <div className="flex flex-wrap gap-1.5">
+                      {SOCIALS.map((s) => (
+                        <a
+                          key={s.label}
+                          href={s.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="plum-outset bg-plum px-2.5 py-1 font-pixel text-lg leading-none text-code-text hover:bg-plum-light/50"
+                        >
+                          {s.label}
+                          <span className="ml-1 opacity-70" aria-hidden>↗</span>
+                        </a>
+                      ))}
+                    </div>
+                  </Field>
                 </div>
 
                 {/* Small 3:4 portrait pinned to the window with a paper clip
                     drawn in SVG. Figure has a negative top margin so the
                     clip visibly overlaps the "To:" email bar above. */}
-                <figure className="relative -mt-8 w-[108px] shrink-0 translate-x-10 -rotate-3">
+                <figure className="relative -mt-8 w-[120px] shrink-0 translate-x-6 -rotate-3">
                   <div className="plum-outset relative aspect-[3/4] overflow-hidden bg-paper shadow-[3px_4px_0_rgba(0,0,0,0.45)]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -135,33 +156,6 @@ export default function ContactWindow({ open, onClose }: Props) {
                   </svg>
                 </figure>
               </div>
-
-              <Field label="email">
-                <a
-                  href="mailto:lagesmica@gmail.com"
-                  className="plum-outset inline-flex items-center gap-1.5 bg-plum px-2.5 py-1 font-mono text-sm text-[#ead9a0] hover:bg-plum-light/50"
-                >
-                  <span aria-hidden className="inline-block size-2 bg-sun pixelated" />
-                  lagesmica@gmail.com
-                </a>
-              </Field>
-
-              <Field label="find me at:">
-                <div className="flex flex-wrap gap-1.5">
-                  {SOCIALS.map((s) => (
-                    <a
-                      key={s.label}
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="plum-outset bg-plum px-2.5 py-1 font-pixel text-base leading-none text-code-text hover:bg-plum-light/50"
-                    >
-                      {s.label}
-                      <span className="ml-1 opacity-70" aria-hidden>↗</span>
-                    </a>
-                  ))}
-                </div>
-              </Field>
             </div>
           </motion.div>
         </motion.div>
@@ -202,7 +196,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <div className="font-pixel text-sm uppercase leading-none tracking-wider text-code-text/60">
+      <div className="font-pixel text-base uppercase leading-none tracking-wider text-code-text/60">
         {label}
       </div>
       {children}

@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useScale } from "@/lib/useScale";
 
 /**
  * Chunky pixel cursor that replaces the native cursor on desktop.
@@ -15,6 +16,7 @@ export default function PixelCursor() {
   const [enabled, setEnabled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const scale = useScale();
 
   useEffect(() => {
     // Skip on touch devices — no cursor to replace.
@@ -70,8 +72,8 @@ export default function PixelCursor() {
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
       {Array.from({ length: 14 }).map((_, i) => {
         const t = i / 13; // 0 (closest to cursor) → 1 (tail end)
-        const headSize = isHome ? 22 : 14;
-        const tailReduction = isHome ? 14 : 9;
+        const headSize = (isHome ? 22 : 14) * scale;
+        const tailReduction = (isHome ? 14 : 9) * scale;
         const size = headSize - t * tailReduction;
         const opacity = (isHome ? 0.85 : 0.75) * (1 - t);
         return (
@@ -96,20 +98,20 @@ export default function PixelCursor() {
         ref={mainRef}
         className="pointer-events-none absolute top-0 left-0 will-change-transform"
       >
-        <CursorArrow big={isHome} />
+        <CursorArrow big={isHome} scale={scale} />
       </div>
     </div>
   );
 }
 
-function CursorArrow({ big }: { big: boolean }) {
+function CursorArrow({ big, scale }: { big: boolean; scale: number }) {
   // 8-bit style arrow. `big` mode (home page only) is dramatically
   // larger with a triple-stack glow; otherwise renders the original
   // small/restrained variant used on the rest of the site.
   return (
     <svg
-      width={big ? 48 : 32}
-      height={big ? 58 : 38}
+      width={(big ? 48 : 32) * scale}
+      height={(big ? 58 : 38) * scale}
       viewBox="0 0 20 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

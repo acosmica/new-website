@@ -14,7 +14,7 @@ export default function EducationalDetail({ entry }: { entry: EducationalEntry }
             fill
             priority
             className="object-cover opacity-50"
-            style={{ filter: "blur(34px) saturate(1.1)" }}
+            style={{ filter: "blur(2.125rem) saturate(1.1)" }}
             sizes="100vw"
           />
         )}
@@ -29,13 +29,13 @@ export default function EducationalDetail({ entry }: { entry: EducationalEntry }
 
       <Link
         href="/gatherings"
-        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
+        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
       >
         <span aria-hidden>←</span> Back
       </Link>
 
       <main className="mx-auto max-w-[88rem] px-4 py-16 md:px-10 md:py-20">
-        <article className="plum-outset bg-plum text-code-text shadow-[10px_12px_0_rgba(0,0,0,0.45)]">
+        <article className="plum-outset bg-plum text-code-text shadow-[0.625rem_0.75rem_0_rgba(0,0,0,0.45)]">
           <div
             className="flex h-9 items-center gap-2 px-1.5 text-code-text"
             style={{
@@ -112,7 +112,7 @@ export default function EducationalDetail({ entry }: { entry: EducationalEntry }
                 href={entry.link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="plum-outset mt-5 inline-block bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50"
+                className="plum-outset mt-5 inline-block bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50"
               >
                 {entry.link.label} →
               </a>
@@ -122,7 +122,7 @@ export default function EducationalDetail({ entry }: { entry: EducationalEntry }
           <div className="border-t border-plum-light/40 px-5 py-4 md:px-8 md:py-5">
             <Link
               href="/gatherings"
-              className="plum-outset inline-block bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50"
+              className="plum-outset inline-block bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50"
             >
               ← Back to Gatherings
             </Link>

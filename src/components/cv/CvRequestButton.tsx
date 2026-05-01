@@ -55,7 +55,7 @@ export default function CvRequestButton() {
 
       {open && (
         <div
-          className="plum-outset absolute right-0 top-[calc(100%+6px)] z-30 w-[320px] bg-paper p-3 font-pixel text-base text-ink shadow-[4px_4px_0_rgba(0,0,0,0.45)]"
+          className="plum-outset absolute right-0 top-[calc(100%+0.375rem)] z-30 w-[20rem] bg-paper p-3 font-pixel text-base text-ink shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.45)]"
         >
           {state.succeeded ? (
             <p

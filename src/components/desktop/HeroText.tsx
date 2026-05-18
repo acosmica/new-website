@@ -41,7 +41,10 @@ export default function HeroText() {
   const [cycleKey, setCycleKey] = useState(0);
   const scale = useScale();
   const scaleRef = useRef(scale);
-  scaleRef.current = scale;
+
+  useEffect(() => {
+    scaleRef.current = scale;
+  }, [scale]);
 
   const advance = () => {
     setIdx((current) => {

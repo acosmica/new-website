@@ -57,9 +57,9 @@ data/
 /*.jpg
 /*.JPG
 
-# video files in /public — too large for GitHub (100 MB/file hard cap, 1 GB
-# recommended repo cap). Live on disk only; switch to Git LFS to version.
-public/**/*.mp4
-public/**/*.MP4
+# Videos in /public are committed as web-compressed MP4s (H.264, ≤1920px,
+# no audio, faststart) so they deploy with the site. Raw masters (.mov and
+# full-size exports) live outside the repo in
+# "../New Website - video originals". Keep each MP4 well under 100 MB.
 public/**/*.mov
 public/**/*.MOV

@@ -23,7 +23,7 @@ export default function PlayerPlaylist({
     <div
       className="relative flex h-full w-full flex-col overflow-hidden"
       style={{
-        borderRadius: "12px",
+        borderRadius: "0.75rem",
         background:
           "linear-gradient(180deg, #150924 0%, #0f0719 60%, #0a0511 100%)",
         boxShadow:
@@ -39,7 +39,7 @@ export default function PlayerPlaylist({
         }}
       >
         <span
-          className="font-mono text-[15px] uppercase tracking-[0.28em]"
+          className="font-mono text-[0.9375rem] uppercase tracking-[0.28em]"
           style={{ color: PHOSPHOR, textShadow: "0 0 6px rgba(242,201,168,0.7)" }}
         >
           ▣ Playlist
@@ -57,7 +57,7 @@ export default function PlayerPlaylist({
                 onClick={() => onSelect(i)}
                 className="group relative block w-full overflow-hidden text-left outline-none focus-visible:[box-shadow:inset_0_0_0_2px_#ff7eb6]"
                 style={{
-                  borderRadius: "8px",
+                  borderRadius: "0.5rem",
                   margin: "2px 0",
                   padding: "9px 12px 9px 16px",
                   background: active
@@ -85,7 +85,7 @@ export default function PlayerPlaylist({
                 <div className="flex items-baseline justify-between gap-3">
                   <div className="flex items-baseline gap-2 truncate">
                     <span
-                      className="truncate font-mono text-[16px] uppercase tracking-[0.1em]"
+                      className="truncate font-mono text-[1rem] uppercase tracking-[0.1em]"
                       style={{
                         color: active ? "#ffffff" : PHOSPHOR,
                         textShadow: active
@@ -99,7 +99,7 @@ export default function PlayerPlaylist({
                 </div>
                 {e.tags[0] && (
                   <p
-                    className="mt-0.5 truncate font-mono text-[14px] uppercase tracking-[0.18em]"
+                    className="mt-0.5 truncate font-mono text-[0.875rem] uppercase tracking-[0.18em]"
                     style={{
                       color: active ? SOFT : DIM,
                       opacity: active ? 0.9 : 0.55,

@@ -140,11 +140,11 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
         <span aria-hidden>←</span> Back
       </Link>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col px-2 py-14 md:px-8 md:py-16">
+      <main className="relative z-10 mx-auto flex w-full max-w-[85rem] flex-col px-2 py-14 md:px-8 md:py-16">
         <article
           className="relative flex w-full flex-col overflow-hidden p-2 md:p-[16px_18px_18px_18px]"
           style={{
-            borderRadius: "28px",
+            borderRadius: "1.75rem",
             background:
               "linear-gradient(135deg, #f5eef3 0%, #d3c2d7 28%, #9d8aa8 58%, #5b4a72 82%, #2a1f3a 100%)",
             boxShadow:
@@ -152,7 +152,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
           }}
         >
           <div
-            className="flex h-[36px] shrink-0 items-center justify-between rounded-[10px] px-4"
+            className="flex h-[2.25rem] shrink-0 items-center justify-between rounded-[0.625rem] px-4"
             style={{
               background:
                 "linear-gradient(180deg, #3a2750 0%, #1f1238 60%, #120a1f 100%)",
@@ -174,19 +174,19 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                 }}
               />
               <span
-                className="hidden shrink-0 font-mono text-[15px] uppercase tracking-[0.28em] md:inline"
+                className="hidden shrink-0 font-mono text-[0.9375rem] uppercase tracking-[0.28em] md:inline"
                 style={{ color: PHOSPHOR, textShadow: `0 0 6px ${PHOSPHOR_GLOW}` }}
               >
                 Experiments.wmp
               </span>
               <span
-                className="shrink-0 truncate font-mono text-[12px] uppercase tracking-[0.18em] md:hidden"
+                className="shrink-0 truncate font-mono text-[0.75rem] uppercase tracking-[0.18em] md:hidden"
                 style={{ color: PHOSPHOR, textShadow: `0 0 6px ${PHOSPHOR_GLOW}` }}
               >
                 Experiments.wmp
               </span>
               <span
-                className="truncate font-mono text-[14px] uppercase tracking-[0.22em] md:text-[14px]"
+                className="truncate font-mono text-[0.875rem] uppercase tracking-[0.22em] md:text-[0.875rem]"
                 style={{ color: ACCENT }}
               >
                 ▸ {track.title}
@@ -197,7 +197,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
           <div
             className="mt-3 flex-1 overflow-hidden"
             style={{
-              borderRadius: "12px",
+              borderRadius: "0.75rem",
               background:
                 "radial-gradient(ellipse at 30% 20%, #2a1340 0%, #150924 55%, #0a0511 100%)",
               boxShadow:
@@ -218,7 +218,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                 </h1>
                 {tagLine && (
                   <p
-                    className="font-mono text-[15px] uppercase tracking-[0.2em]"
+                    className="font-mono text-[0.9375rem] uppercase tracking-[0.2em]"
                     style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
                   >
                     {tagLine}
@@ -292,7 +292,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                             <figure
                               className="relative w-full overflow-hidden md:hidden"
                               style={{
-                                borderRadius: "10px",
+                                borderRadius: "0.625rem",
                                 boxShadow:
                                   "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
                                 background: "#0a0511",
@@ -313,7 +313,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                               className="relative hidden w-full overflow-hidden md:block"
                               style={{
                                 aspectRatio: cfg.gridAspect ?? "4 / 3",
-                                borderRadius: "10px",
+                                borderRadius: "0.625rem",
                                 boxShadow:
                                   "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
                                 background: "#0a0511",
@@ -350,7 +350,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                           key={src + i}
                           className="relative w-full overflow-hidden"
                           style={{
-                            borderRadius: "10px",
+                            borderRadius: "0.625rem",
                             boxShadow:
                               "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
                             background: "#0a0511",
@@ -372,7 +372,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                           <div
                             className="relative w-full overflow-hidden md:hidden"
                             style={{
-                              borderRadius: "10px",
+                              borderRadius: "0.625rem",
                               boxShadow:
                                 "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
                               background: "#0a0511",
@@ -393,7 +393,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                             className="relative hidden w-full overflow-hidden md:block"
                             style={{
                               aspectRatio: cfg.gridAspect ?? "3 / 4",
-                              borderRadius: "10px",
+                              borderRadius: "0.625rem",
                               boxShadow:
                                 "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
                               background: "#0a0511",
@@ -414,7 +414,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                           </div>
                           {cfg.rowCaptions && cfg.gridCols && (
                             <figcaption
-                              className="text-center font-mono text-[12px] uppercase tracking-[0.22em]"
+                              className="text-center font-mono text-[0.75rem] uppercase tracking-[0.22em]"
                               style={{
                                 color: PHOSPHOR,
                                 textShadow: `0 0 4px ${PHOSPHOR_GLOW}`,
@@ -434,7 +434,7 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                         key={src + i}
                         className="relative w-full overflow-hidden"
                         style={{
-                          borderRadius: "10px",
+                          borderRadius: "0.625rem",
                           boxShadow:
                             "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
                           background: "#0a0511",

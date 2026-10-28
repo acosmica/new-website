@@ -336,7 +336,7 @@ export default async function FeaturedDetail({
           fill
           priority
           className="object-cover opacity-50"
-          style={{ filter: "blur(34px) saturate(1.1)" }}
+          style={{ filter: "blur(2.125rem) saturate(1.1)" }}
           sizes="100vw"
         />
         <div
@@ -350,13 +350,13 @@ export default async function FeaturedDetail({
 
       <Link
         href="/gatherings"
-        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
+        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
       >
         <span aria-hidden>←</span> Back
       </Link>
 
       <main className="mx-auto max-w-[78rem] px-4 py-16 md:px-10 md:py-24">
-        <article className="plum-outset bg-plum text-code-text shadow-[8px_10px_0_rgba(0,0,0,0.45)]">
+        <article className="plum-outset bg-plum text-code-text shadow-[0.5rem_0.625rem_0_rgba(0,0,0,0.45)]">
           {/* Hero — auto-scrolling slideshow of the festival's vertical
               assets when `heroSlides` is provided; falls back to the
               static hero image otherwise. The metadata strip is

@@ -419,7 +419,7 @@ export default function ProjectView({ project }: Props) {
     <article className="h-full overflow-y-auto bg-plum text-code-text">
       <section
         className="relative w-full overflow-hidden bg-code-gutter"
-        style={{ height: "min(82vh, 720px)" }}
+        style={{ height: "min(82vh, 45rem)" }}
       >
         {heroVideoSrc ? (
           <HeroVideo src={heroVideoSrc} poster={heroImageSrc} />

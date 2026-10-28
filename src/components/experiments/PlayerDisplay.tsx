@@ -27,7 +27,7 @@ export default function PlayerDisplay({
     <div
       className="relative h-full w-full overflow-hidden"
       style={{
-        borderRadius: "12px",
+        borderRadius: "0.75rem",
         background:
           "radial-gradient(ellipse at 30% 20%, #2a1340 0%, #150924 55%, #0a0511 100%)",
         boxShadow:
@@ -116,13 +116,13 @@ function IntroView({ intro }: { intro: IntroPayload }) {
       </div>
 
       <p
-        className="mt-1 hidden font-mono text-[18px] uppercase tracking-[0.24em] md:block"
+        className="mt-1 hidden font-mono text-[1.125rem] uppercase tracking-[0.24em] md:block"
         style={{ color: PHOSPHOR, opacity: 0.85 }}
       >
         Select a track from the playlist to inspect ▸
       </p>
       <p
-        className="mt-1 font-mono text-[14px] uppercase tracking-[0.22em] md:hidden"
+        className="mt-1 font-mono text-[0.875rem] uppercase tracking-[0.22em] md:hidden"
         style={{ color: PHOSPHOR, opacity: 0.85 }}
       >
         ▾ select a project below to inspect
@@ -210,7 +210,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
     <div
       className="relative w-full overflow-hidden"
       style={{
-        borderRadius: "8px",
+        borderRadius: "0.5rem",
         boxShadow:
           "inset 0 0 0 2px rgba(242,201,168,0.45), inset 0 0 22px rgba(0,0,0,0.6), 0 0 0 4px #2a1340, 0 0 22px rgba(242,201,168,0.18)",
         background: "#0a0511",
@@ -250,7 +250,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
 
       {slideImages.length > 1 && (
         <div
-          className="absolute right-3 top-3 hidden rounded-md px-2.5 py-1 font-mono text-[14px] tabular-nums uppercase tracking-[0.18em] md:block"
+          className="absolute right-3 top-3 hidden rounded-md px-2.5 py-1 font-mono text-[0.875rem] tabular-nums uppercase tracking-[0.18em] md:block"
           style={{
             color: PHOSPHOR,
             background: "rgba(10,5,17,0.7)",
@@ -333,7 +333,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
             </h2>
             {tagLine && (
               <p
-                className="hidden font-mono text-[15px] uppercase tracking-[0.18em] md:block"
+                className="hidden font-mono text-[0.9375rem] uppercase tracking-[0.18em] md:block"
                 style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
               >
                 {tagLine}
@@ -378,7 +378,7 @@ function TrackView({ track, playing }: { track: Experiment; playing: boolean }) 
           </h2>
           {tagLine && (
             <p
-              className="hidden truncate font-mono text-[14px] uppercase tracking-[0.18em] md:inline"
+              className="hidden truncate font-mono text-[0.875rem] uppercase tracking-[0.18em] md:inline"
               style={{ color: COOL, textShadow: "0 0 4px rgba(201,165,212,0.55)" }}
             >
               {tagLine}

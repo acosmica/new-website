@@ -32,7 +32,7 @@ export default function HeroSlideshow({
   return (
     <div
       className="plum-inset relative w-full overflow-hidden bg-code-gutter"
-      style={{ height: "min(80vh, 720px)" }}
+      style={{ height: "min(80vh, 45rem)" }}
     >
       {images.map((src, i) => (
         <div

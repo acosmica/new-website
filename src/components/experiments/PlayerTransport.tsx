@@ -30,14 +30,14 @@ export default function PlayerTransport({
     <div
       className="relative w-full overflow-hidden"
       style={{
-        borderRadius: "12px",
+        borderRadius: "0.75rem",
         background:
           "linear-gradient(180deg, #f0e7ee 0%, #d3c2d7 30%, #9d8aa8 70%, #5b4a72 100%)",
         boxShadow:
           "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -2px 4px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.35), 0 0 0 1px rgba(0,0,0,0.6)",
       }}
     >
-      <div className="flex h-[64px] items-center gap-4 px-4">
+      <div className="flex h-[4rem] items-center gap-4 px-4">
         {/* Left — readout + mini eq */}
         <div className="flex shrink-0 items-center gap-2">
           <Readout value={fmtTime(elapsedSec)} sub={fmtTime(totalSec)} color={PHOSPHOR} />
@@ -91,14 +91,14 @@ function Readout({
         style={{
           color,
           textShadow: `0 0 6px ${color}aa`,
-          fontSize: "15px",
+          fontSize: "0.9375rem",
           letterSpacing: "0.04em",
         }}
       >
         {value}
       </span>
       <span
-        className="font-mono text-[12px] uppercase tracking-[0.18em]"
+        className="font-mono text-[0.75rem] uppercase tracking-[0.18em]"
         style={{ color, opacity: 0.55 }}
       >
         / {sub}
@@ -141,7 +141,7 @@ function MiniEq({ playing }: { playing: boolean }) {
 
   return (
     <div
-      className="flex h-[28px] w-[44px] items-end gap-[2px] rounded-md px-1.5 py-1"
+      className="flex h-[1.75rem] w-[2.75rem] items-end gap-[2px] rounded-md px-1.5 py-1"
       style={{
         background: "linear-gradient(180deg, #150924 0%, #0a0511 100%)",
         boxShadow:
@@ -185,8 +185,8 @@ function ChromeBtn({
       aria-label={ariaLabel}
       className="group relative flex items-center justify-center outline-none"
       style={{
-        width: `${size}px`,
-        height: `${size}px`,
+        width: `calc(${size}px * var(--scale))`,
+        height: `calc(${size}px * var(--scale))`,
         borderRadius: "999px",
         background:
           "radial-gradient(circle at 35% 25%, #fafafd 0%, #d6cee0 35%, #8e7ea0 75%, #4a3858 100%)",
@@ -274,7 +274,7 @@ function Slider({
       <div
         className="absolute left-0 right-0 top-1/2 -translate-y-1/2 rounded-full"
         style={{
-          height: "5px",
+          height: "0.3125rem",
           background: "linear-gradient(180deg, #2a1840 0%, #120a1f 100%)",
           boxShadow:
             "inset 0 1px 2px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.1), 0 1px 0 rgba(255,255,255,0.5)",
@@ -284,7 +284,7 @@ function Slider({
         className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full"
         style={{
           width: `${value}%`,
-          height: "5px",
+          height: "0.3125rem",
           background: `linear-gradient(90deg, ${accent}aa 0%, ${accent} 100%)`,
           boxShadow: `0 0 8px ${accent}aa, inset 0 1px 0 rgba(255,255,255,0.45)`,
         }}
@@ -303,8 +303,8 @@ function Slider({
         className="pointer-events-none absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{
           left: `${value}%`,
-          width: "12px",
-          height: "12px",
+          width: "0.75rem",
+          height: "0.75rem",
           borderRadius: "50%",
           background:
             "radial-gradient(circle at 30% 25%, #ffffff 0%, #d8cce0 35%, #776a8c 75%, #2c1f40 100%)",
@@ -330,7 +330,13 @@ function RotaryKnob({
   const angle = -135 + (value / 100) * 270;
   const size = 42;
   return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
+    <div
+      className="relative shrink-0"
+      style={{
+        width: `calc(${size}px * var(--scale))`,
+        height: `calc(${size}px * var(--scale))`,
+      }}
+    >
       <div
         className="absolute inset-0 rounded-full"
         style={{

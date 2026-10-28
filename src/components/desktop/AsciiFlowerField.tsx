@@ -125,7 +125,8 @@ function FlowerInstance({
           aria-hidden
           className="absolute inset-0 mix-blend-screen opacity-60"
           style={{
-            transform: "translate(3px, -2px)",
+            transform:
+              "translate(calc(3px * var(--scale)), calc(-2px * var(--scale)))",
             filter: "hue-rotate(-20deg)",
           }}
         >

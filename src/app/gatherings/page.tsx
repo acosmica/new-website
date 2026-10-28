@@ -24,7 +24,7 @@ export default function GatheringsPage() {
           fill
           priority
           className="object-cover opacity-50"
-          style={{ filter: "blur(28px) saturate(1.1)" }}
+          style={{ filter: "blur(1.75rem) saturate(1.1)" }}
           sizes="100vw"
         />
         {/* Plum tint over the blur so the page reads in-family */}
@@ -41,7 +41,7 @@ export default function GatheringsPage() {
           style={{
             backgroundImage:
               "radial-gradient(circle, rgba(245,241,230,1) 1px, transparent 1.4px)",
-            backgroundSize: "12px 12px",
+            backgroundSize: "0.75rem 0.75rem",
           }}
         />
       </div>
@@ -49,7 +49,7 @@ export default function GatheringsPage() {
       {/* Floating "back to desktop" pill, top-left */}
       <Link
         href="/"
-        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[4px_4px_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
+        className="plum-outset fixed left-4 top-4 z-50 inline-flex items-center gap-2 bg-plum px-3 py-1.5 font-pixel text-base leading-none text-code-text shadow-[0.25rem_0.25rem_0_rgba(0,0,0,0.45)] hover:bg-plum-light/50 md:left-6 md:top-6"
       >
         <span aria-hidden>←</span> Back
       </Link>

@@ -85,15 +85,15 @@ export default function CodePanel() {
             className="inline-block size-3 bg-mint pixelated pixel-outset"
           />
           <span className="truncate">{snippet.title}</span>
-          <span className="ml-auto font-mono text-[10px] uppercase opacity-70">
+          <span className="ml-auto font-mono text-[0.625rem] uppercase opacity-70">
             {snippet.lang}
           </span>
         </div>
-        <pre className="pixel-inset m-1 h-48 overflow-hidden bg-code-gutter p-3 font-mono text-[12px] leading-relaxed text-[#ead9e8]">
+        <pre className="pixel-inset m-1 h-48 overflow-hidden bg-code-gutter p-3 font-mono text-[0.75rem] leading-relaxed text-[#ead9e8]">
           <code className="whitespace-pre-wrap">
             {rendered}
             <span
-              className={`inline-block w-[7px] h-[14px] -mb-[2px] align-middle bg-[#efb3c3] ${
+              className={`inline-block w-[0.4375rem] h-[0.875rem] -mb-[2px] align-middle bg-[#efb3c3] ${
                 isTyping ? "animate-pulse" : ""
               }`}
               aria-hidden

@@ -412,7 +412,7 @@ export default function StampStudio() {
         id="stamp-dock"
         className="fixed bottom-14 left-1/2 z-[80] -translate-x-1/2"
       >
-        <div className="flex items-end gap-1.5 rounded-xl border border-white/15 bg-plum/55 px-2 py-1.5 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md">
+        <div className="flex items-end gap-1.5 rounded-xl border border-white/15 bg-plum/55 px-2 py-1.5 shadow-[0_0.5rem_1.375rem_rgba(0,0,0,0.35)] backdrop-blur-md">
           {TOOLS.map((t) => {
             const isHover = hoverTool === t.id;
             const isActive = activeTool === t.id;

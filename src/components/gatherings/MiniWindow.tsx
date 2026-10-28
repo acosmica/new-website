@@ -60,8 +60,8 @@ export default function MiniWindow({
         transform: `rotate(${tilt}deg)`,
         boxShadow:
           variant === "paper"
-            ? "1px 2px 0 rgba(0,0,0,0.08), 4px 8px 16px rgba(0,0,0,0.25)"
-            : "6px 8px 0 rgba(0,0,0,0.35)",
+            ? "1px 2px 0 rgba(0,0,0,0.08), 0.25rem 0.5rem 1rem rgba(0,0,0,0.25)"
+            : "0.375rem 0.5rem 0 rgba(0,0,0,0.35)",
       }}
     >
       <div

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import HydraPolaroid from "./HydraPolaroid";
 import StickyNote from "./StickyNote";
+import { useScale } from "@/lib/useScale";
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
@@ -18,58 +19,56 @@ function useIsMobile() {
 
 // --- Spiral geometry (shared by the mask + the SVG overlays so the wire
 // passes through exactly where the paper is cut) ------------------------
-const HOLE_PITCH = 44;      // vertical distance between rings (px)
-const HOLE_COUNT = 40;      // enough rings for a full-height, scrollable page
-const TILE_WIDTH = 120;     // SVG pattern tile width — holds the full loop
-const RING_CX = 60;         // horizontal centre of each loop inside a tile
-const RING_CY = 22;         // vertical centre of each loop inside a tile
-const HOLE_RX = 8;
-const HOLE_RY = 4;
+// Base values designed against the 1800px viewport baseline. The Corkboard
+// component multiplies each by `useScale()` so the spiral binding grows
+// proportionally with the rest of the page on large monitors.
+const BASE_HOLE_PITCH = 44;
+const HOLE_COUNT = 40;
+const BASE_TILE_WIDTH = 120;
+const BASE_RING_CX = 60;
+const BASE_RING_CY = 22;
+const BASE_HOLE_RX = 8;
+const BASE_HOLE_RY = 4;
 
-// CSS mask that punches transparent ellipses down the centre of the
-// paper at each ring position. `mask-composite: intersect` means the
-// paper is visible only where ALL gradients are opaque — so each hole
-// position (transparent in its gradient) gets cut out.
-const HOLE_MASK = Array.from({ length: HOLE_COUNT }, (_, i) => {
-  const y = i * HOLE_PITCH + HOLE_PITCH / 2;
-  return `radial-gradient(ellipse ${HOLE_RX}px ${HOLE_RY}px at 50% ${y}px, transparent 85%, black 100%)`;
-}).join(", ");
+function buildHoleMask(pitch: number, rx: number, ry: number): string {
+  return Array.from({ length: HOLE_COUNT }, (_, i) => {
+    const y = i * pitch + pitch / 2;
+    return `radial-gradient(ellipse ${rx}px ${ry}px at 50% ${y}px, transparent 85%, black 100%)`;
+  }).join(", ");
+}
 
 // Notebook-paper surface — dusty lavender base, rule lines, pink margin,
 // diagonal creases. The darker centre shadow has been dropped now that
-// the spiral binding is 3D and punches real holes.
-const PAPER_STYLE: React.CSSProperties = {
-  backgroundColor: "#cec2d2",
-  backgroundImage: [
-    // Clean 32px-period rule lines so bio text can sit exactly on them.
-    "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 32px)",
-    "linear-gradient(90deg, transparent calc(3.5rem - 1px), rgba(214, 133, 155, 0.7) calc(3.5rem - 1px), rgba(214, 133, 155, 0.7) calc(3.5rem + 1px), transparent calc(3.5rem + 1px))",
-    "linear-gradient(112deg, transparent 0%, transparent 22%, rgba(0,0,0,0.06) 23%, transparent 24%, transparent 100%)",
-    "linear-gradient(82deg, transparent 0%, transparent 55%, rgba(0,0,0,0.05) 56%, transparent 57%, transparent 100%)",
-    "linear-gradient(155deg, transparent 0%, transparent 72%, rgba(0,0,0,0.04) 73%, transparent 74%, transparent 100%)",
-    "linear-gradient(70deg, transparent 0%, transparent 35%, rgba(255,255,255,0.04) 36%, rgba(255,255,255,0.04) 37%, transparent 38%, transparent 100%)",
-    "linear-gradient(180deg, #d4c7d8 0%, #c4b7c8 100%)",
-  ].join(", "),
-  maskImage: HOLE_MASK,
-  WebkitMaskImage: HOLE_MASK,
-  maskComposite: "intersect",
-  WebkitMaskComposite: "source-in",
-};
+// the spiral binding is 3D and punches real holes. PAPER_BG_LAYERS is
+// reused across the desktop + mobile variants; the desktop variant adds
+// a CSS mask built from the scaled spiral geometry per-render.
+const PAPER_BG_LAYERS = [
+  // Clean 2rem-period rule lines so bio text can sit exactly on them.
+  "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 2rem)",
+  "linear-gradient(90deg, transparent calc(3.5rem - 1px), rgba(214, 133, 155, 0.7) calc(3.5rem - 1px), rgba(214, 133, 155, 0.7) calc(3.5rem + 1px), transparent calc(3.5rem + 1px))",
+  "linear-gradient(112deg, transparent 0%, transparent 22%, rgba(0,0,0,0.06) 23%, transparent 24%, transparent 100%)",
+  "linear-gradient(82deg, transparent 0%, transparent 55%, rgba(0,0,0,0.05) 56%, transparent 57%, transparent 100%)",
+  "linear-gradient(155deg, transparent 0%, transparent 72%, rgba(0,0,0,0.04) 73%, transparent 74%, transparent 100%)",
+  "linear-gradient(70deg, transparent 0%, transparent 35%, rgba(255,255,255,0.04) 36%, rgba(255,255,255,0.04) 37%, transparent 38%, transparent 100%)",
+  "linear-gradient(180deg, #d4c7d8 0%, #c4b7c8 100%)",
+].join(", ");
 
 // Mobile variant: no pink margin line (the bio uses the full width of
 // the page, so a vertical margin guide doesn't make sense), no spiral
-// holes, and rule lines kept on the same 32px cadence so 32px line-height
+// holes, and rule lines kept on the same 2rem cadence so 2rem line-height
 // text sits exactly on the lines.
+const MOBILE_PAPER_BG_LAYERS = [
+  "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 2rem)",
+  "linear-gradient(112deg, transparent 0%, transparent 22%, rgba(0,0,0,0.06) 23%, transparent 24%, transparent 100%)",
+  "linear-gradient(82deg, transparent 0%, transparent 55%, rgba(0,0,0,0.05) 56%, transparent 57%, transparent 100%)",
+  "linear-gradient(155deg, transparent 0%, transparent 72%, rgba(0,0,0,0.04) 73%, transparent 74%, transparent 100%)",
+  "linear-gradient(70deg, transparent 0%, transparent 35%, rgba(255,255,255,0.04) 36%, rgba(255,255,255,0.04) 37%, transparent 38%, transparent 100%)",
+  "linear-gradient(180deg, #d4c7d8 0%, #c4b7c8 100%)",
+].join(", ");
+
 const MOBILE_PAPER_STYLE: React.CSSProperties = {
   backgroundColor: "#cec2d2",
-  backgroundImage: [
-    "repeating-linear-gradient(180deg, rgba(82, 54, 101, 0.3) 0, rgba(82, 54, 101, 0.3) 1px, transparent 1px, transparent 32px)",
-    "linear-gradient(112deg, transparent 0%, transparent 22%, rgba(0,0,0,0.06) 23%, transparent 24%, transparent 100%)",
-    "linear-gradient(82deg, transparent 0%, transparent 55%, rgba(0,0,0,0.05) 56%, transparent 57%, transparent 100%)",
-    "linear-gradient(155deg, transparent 0%, transparent 72%, rgba(0,0,0,0.04) 73%, transparent 74%, transparent 100%)",
-    "linear-gradient(70deg, transparent 0%, transparent 35%, rgba(255,255,255,0.04) 36%, rgba(255,255,255,0.04) 37%, transparent 38%, transparent 100%)",
-    "linear-gradient(180deg, #d4c7d8 0%, #c4b7c8 100%)",
-  ].join(", "),
+  backgroundImage: MOBILE_PAPER_BG_LAYERS,
 };
 
 const PAPER_NOISE =
@@ -201,13 +200,20 @@ function GlitterStar({ spec, idx }: { spec: StarSpec; idx: number }) {
 }
 
 /** The section of wire you see THROUGH each punched hole — drawn below
- *  the paper so it only appears inside the transparent cut-out. */
-function SpiralRear() {
+ *  the paper so it only appears inside the transparent cut-out. Internal
+ *  coordinates and stroke widths are all multiplied by `scale` so the
+ *  binding grows in lockstep with the rest of the page composition. */
+function SpiralRear({ scale }: { scale: number }) {
+  const s = scale;
+  const tileWidth = BASE_TILE_WIDTH * s;
+  const pitch = BASE_HOLE_PITCH * s;
+  const cx = BASE_RING_CX * s;
+  const cy = BASE_RING_CY * s;
   return (
     <svg
       aria-hidden
       className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2"
-      width={TILE_WIDTH}
+      width={tileWidth}
       height="100%"
       preserveAspectRatio="none"
     >
@@ -221,27 +227,22 @@ function SpiralRear() {
         </linearGradient>
         <pattern
           id="rear-wire"
-          width={TILE_WIDTH}
-          height={HOLE_PITCH}
+          width={tileWidth}
+          height={pitch}
           patternUnits="userSpaceOnUse"
         >
-          {/* A short vertical wire section crossing through the hole,
-              shaded left→right with the metallic gradient above for a
-              round, dimensional feel. Height exceeds the hole slightly
-              so the paper crops it cleanly. */}
           <rect
-            x={RING_CX - 3}
-            y={RING_CY - 9}
-            width={6}
-            height={18}
+            x={cx - 3 * s}
+            y={cy - 9 * s}
+            width={6 * s}
+            height={18 * s}
             fill="url(#wire-cross)"
           />
-          {/* drop-shadow where the wire passes behind the hole rim */}
           <rect
-            x={RING_CX - 3}
-            y={RING_CY + 4}
-            width={6}
-            height={5}
+            x={cx - 3 * s}
+            y={cy + 4 * s}
+            width={6 * s}
+            height={5 * s}
             fill="rgba(0,0,0,0.55)"
           />
         </pattern>
@@ -253,76 +254,75 @@ function SpiralRear() {
 
 /** The visible top arc of each ring — drawn above the paper, with multi-
  *  layer strokes to read as cylindrical metal with a specular highlight. */
-function SpiralFront() {
+function SpiralFront({ scale }: { scale: number }) {
+  const s = scale;
+  const tileWidth = BASE_TILE_WIDTH * s;
+  const pitch = BASE_HOLE_PITCH * s;
+  const cx = BASE_RING_CX * s;
+  const cy = BASE_RING_CY * s;
   return (
     <svg
       aria-hidden
       className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2"
-      width={TILE_WIDTH}
+      width={tileWidth}
       height="100%"
       preserveAspectRatio="none"
     >
       <defs>
         <pattern
           id="front-wire"
-          width={TILE_WIDTH}
-          height={HOLE_PITCH}
+          width={tileWidth}
+          height={pitch}
           patternUnits="userSpaceOnUse"
         >
-          {/* cast shadow on the paper, offset down-right */}
           <path
-            d={`M ${RING_CX - 18} ${RING_CY + 2} Q ${RING_CX + 2} ${RING_CY - 18} ${RING_CX + 22} ${RING_CY + 2}`}
+            d={`M ${cx - 18 * s} ${cy + 2 * s} Q ${cx + 2 * s} ${cy - 18 * s} ${cx + 22 * s} ${cy + 2 * s}`}
             fill="none"
             stroke="rgba(0,0,0,0.35)"
-            strokeWidth={5}
+            strokeWidth={5 * s}
             strokeLinecap="round"
           />
-          {/* outer dark edge (bottom of the cylinder) */}
           <path
-            d={`M ${RING_CX - 19} ${RING_CY} Q ${RING_CX} ${RING_CY - 19} ${RING_CX + 19} ${RING_CY}`}
+            d={`M ${cx - 19 * s} ${cy} Q ${cx} ${cy - 19 * s} ${cx + 19 * s} ${cy}`}
             fill="none"
             stroke="#2d2138"
-            strokeWidth={5.5}
+            strokeWidth={5.5 * s}
             strokeLinecap="round"
           />
-          {/* mid metal body */}
           <path
-            d={`M ${RING_CX - 19} ${RING_CY} Q ${RING_CX} ${RING_CY - 19} ${RING_CX + 19} ${RING_CY}`}
+            d={`M ${cx - 19 * s} ${cy} Q ${cx} ${cy - 19 * s} ${cx + 19 * s} ${cy}`}
             fill="none"
             stroke="#8a7a99"
-            strokeWidth={3.8}
+            strokeWidth={3.8 * s}
             strokeLinecap="round"
           />
-          {/* brighter upper body */}
           <path
-            d={`M ${RING_CX - 19} ${RING_CY - 0.4} Q ${RING_CX} ${RING_CY - 19} ${RING_CX + 18.6} ${RING_CY - 0.4}`}
+            d={`M ${cx - 19 * s} ${cy - 0.4 * s} Q ${cx} ${cy - 19 * s} ${cx + 18.6 * s} ${cy - 0.4 * s}`}
             fill="none"
             stroke="#c4b6d0"
-            strokeWidth={2.4}
+            strokeWidth={2.4 * s}
             strokeLinecap="round"
           />
-          {/* specular highlight */}
           <path
-            d={`M ${RING_CX - 12} ${RING_CY - 8} Q ${RING_CX} ${RING_CY - 17} ${RING_CX + 12} ${RING_CY - 8}`}
+            d={`M ${cx - 12 * s} ${cy - 8 * s} Q ${cx} ${cy - 17 * s} ${cx + 12 * s} ${cy - 8 * s}`}
             fill="none"
             stroke="#f4eef6"
-            strokeWidth={1}
+            strokeWidth={1 * s}
             strokeLinecap="round"
             opacity={0.95}
           />
-          {/* tiny rim highlight at the hole */}
           <path
-            d={`M ${RING_CX - 19} ${RING_CY} Q ${RING_CX - 16} ${RING_CY - 2} ${RING_CX - 13} ${RING_CY}`}
+            d={`M ${cx - 19 * s} ${cy} Q ${cx - 16 * s} ${cy - 2 * s} ${cx - 13 * s} ${cy}`}
             fill="none"
             stroke="#eadfec"
-            strokeWidth={0.6}
+            strokeWidth={0.6 * s}
             strokeLinecap="round"
           />
           <path
-            d={`M ${RING_CX + 13} ${RING_CY} Q ${RING_CX + 16} ${RING_CY - 2} ${RING_CX + 19} ${RING_CY}`}
+            d={`M ${cx + 13 * s} ${cy} Q ${cx + 16 * s} ${cy - 2 * s} ${cx + 19 * s} ${cy}`}
             fill="none"
             stroke="#eadfec"
-            strokeWidth={0.6}
+            strokeWidth={0.6 * s}
             strokeLinecap="round"
           />
         </pattern>
@@ -361,14 +361,14 @@ function WashiTape({
   };
   return (
     <div
-      className="pointer-events-none absolute z-[22] select-none font-hand text-[22px] leading-tight text-ink/80"
+      className="pointer-events-none absolute z-[22] select-none font-hand text-[1.375rem] leading-tight text-ink/80"
       style={{
-        width,
+        width: `calc(${width}px * var(--scale))`,
         background: STRIPE[color],
-        padding: "10px 16px",
+        padding: "0.625rem 1rem",
         transform: `rotate(${rotate}deg)`,
         boxShadow:
-          "1px 2px 0 rgba(0,0,0,0.08), 4px 7px 12px rgba(0,0,0,0.12)",
+          "1px 2px 0 rgba(0,0,0,0.08), 0.25rem 0.4375rem 0.75rem rgba(0,0,0,0.12)",
         ...style,
       }}
     >
@@ -384,29 +384,56 @@ const PAGE_HEIGHT = 1024;
 
 export default function Corkboard() {
   const isMobile = useIsMobile();
+  const scale = useScale();
+
+  // Spiral binding geometry + the matching CSS mask are both derived from
+  // `--scale` so the holes, wire, and rings grow with the page on large
+  // monitors. Memoised because the mask is a 40-stop gradient string.
+  const holeMask = useMemo(
+    () =>
+      buildHoleMask(
+        BASE_HOLE_PITCH * scale,
+        BASE_HOLE_RX * scale,
+        BASE_HOLE_RY * scale,
+      ),
+    [scale],
+  );
+
+  const paperStyle = useMemo<React.CSSProperties>(
+    () => ({
+      backgroundColor: "#cec2d2",
+      backgroundImage: PAPER_BG_LAYERS,
+      maskImage: holeMask,
+      WebkitMaskImage: holeMask,
+      maskComposite: "intersect",
+      WebkitMaskComposite: "source-in",
+    }),
+    [holeMask],
+  );
+
   return (
     // Outer scroll viewport — fixed to the window body area. Inner wrapper
     // is explicitly sized so absolute-positioned paper/spiral/content cover
     // the full scroll extent and move with the scroll.
-    <div className="relative h-[calc(100dvh-140px)] w-full overflow-y-auto overflow-x-hidden">
+    <div className="relative h-[calc(100dvh-8.75rem)] w-full overflow-y-auto overflow-x-hidden">
       <div
         className="relative w-full"
         style={
           isMobile
-            ? { minHeight: "calc(100dvh - 140px)" }
-            : { height: `${PAGE_HEIGHT}px` }
+            ? { minHeight: "calc(100dvh - 8.75rem)" }
+            : { height: `calc(${PAGE_HEIGHT}px * var(--scale))` }
         }
       >
       {/* Spiral binding + punched holes — desktop only. On mobile the page
           is one continuous tall sheet without the centre split. */}
-      {!isMobile && <SpiralRear />}
+      {!isMobile && <SpiralRear scale={scale} />}
 
       {/* Notebook paper. On desktop, holes are punched down the centre via
           a CSS mask. On mobile, no mask = continuous paper. */}
       <div
         aria-hidden
         className="absolute inset-0"
-        style={isMobile ? MOBILE_PAPER_STYLE : PAPER_STYLE}
+        style={isMobile ? MOBILE_PAPER_STYLE : paperStyle}
       />
 
       {/* Paper grain + wrinkle layers (masked identically so noise also
@@ -416,10 +443,10 @@ export default function Corkboard() {
         className="pointer-events-none absolute inset-0 mix-blend-multiply opacity-[0.32]"
         style={{
           backgroundImage: PAPER_NOISE,
-          backgroundSize: "400px 400px",
+          backgroundSize: "25rem 25rem",
           ...(isMobile ? {} : {
-            maskImage: HOLE_MASK,
-            WebkitMaskImage: HOLE_MASK,
+            maskImage: holeMask,
+            WebkitMaskImage: holeMask,
             maskComposite: "intersect" as const,
             WebkitMaskComposite: "source-in",
           }),
@@ -430,17 +457,17 @@ export default function Corkboard() {
         className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-[0.25]"
         style={{
           backgroundImage: PAPER_NOISE,
-          backgroundSize: "180px 180px",
+          backgroundSize: "11.25rem 11.25rem",
           ...(isMobile ? {} : {
-            maskImage: HOLE_MASK,
-            WebkitMaskImage: HOLE_MASK,
+            maskImage: holeMask,
+            WebkitMaskImage: holeMask,
             maskComposite: "intersect" as const,
             WebkitMaskComposite: "source-in",
           }),
         }}
       />
 
-      {!isMobile && <SpiralFront />}
+      {!isMobile && <SpiralFront scale={scale} />}
 
       {/* Polaroid — desktop: large, top-right with the live hydra overlay.
           Mobile uses a static, tighter-margin polaroid floated into the
@@ -451,7 +478,7 @@ export default function Corkboard() {
           caption="mini mica, live-coded"
           rotate={5}
           size={320}
-          style={{ position: "absolute", top: "40px", right: "4%", zIndex: 30 }}
+          style={{ position: "absolute", top: "2.5rem", right: "4%", zIndex: 30 }}
         />
       )}
 
@@ -461,7 +488,7 @@ export default function Corkboard() {
           <StickyNote
             color="mauve"
             rotate={-4}
-            style={{ top: "24px", left: "6rem" }}
+            style={{ top: "1.5rem", left: "6rem" }}
             width={280}
           >
             Hi, I&apos;m Micaelle!
@@ -474,7 +501,7 @@ export default function Corkboard() {
           <StickyNote
             color="blush"
             rotate={3}
-            style={{ top: "760px", right: "3rem" }}
+            style={{ top: "47.5rem", right: "3rem" }}
             width={260}
           >
             currently obsessed with:
@@ -494,15 +521,15 @@ export default function Corkboard() {
         <div
           className="relative z-10 font-mono text-ink/85"
           style={{
-            // 32px paddingTop puts the first text line box exactly between
-            // the first and second rule line, so each baseline (≈24px from
-            // the top of its 32px line box) lands on a rule line below.
-            paddingTop: "32px",
+            // 2rem paddingTop puts the first text line box exactly between
+            // the first and second rule line, so each baseline (≈1.5rem from
+            // the top of its 2rem line box) lands on a rule line below.
+            paddingTop: "2rem",
             paddingLeft: "1.25rem",
             paddingRight: "1.25rem",
             paddingBottom: "3rem",
-            fontSize: "17px",
-            lineHeight: "32px",
+            fontSize: "1.0625rem",
+            lineHeight: "2rem",
             whiteSpace: "pre-wrap",
           }}
         >
@@ -511,11 +538,11 @@ export default function Corkboard() {
             className="float-right ml-3 mb-2"
             style={{
               transform: "rotate(5deg)",
-              filter: "drop-shadow(2px 3px 0 rgba(0,0,0,0.35))",
+              filter: "drop-shadow(0.125rem 0.1875rem 0 rgba(0,0,0,0.35))",
             }}
           >
             <div className="bg-paper p-1.5 pb-5">
-              <div className="relative aspect-square w-[160px] overflow-hidden bg-plum">
+              <div className="relative aspect-square w-[10rem] overflow-hidden bg-plum">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/about/me.jpg"
@@ -550,11 +577,11 @@ My energy also extends into community-building and education, being a former pro
           <div
             className="pointer-events-none absolute z-10 font-mono text-ink/85"
             style={{
-              top: "70px",
+              top: "4.375rem",
               left: "4rem",
               right: "calc(50% + 3.5rem)",
-              fontSize: "17px",
-              lineHeight: "32px",
+              fontSize: "1.0625rem",
+              lineHeight: "2rem",
               whiteSpace: "pre-wrap",
             }}
           >
@@ -563,7 +590,7 @@ My energy also extends into community-building and education, being a former pro
               style={{
                 float: "left",
                 width: "21rem",
-                height: "88px",
+                height: "5.5rem",
                 shapeOutside: "margin-box",
                 marginRight: "0.5rem",
               }}
@@ -582,11 +609,11 @@ As the founder and Creative Director of thecode, I’ve led the development of l
           <div
             className="pointer-events-none absolute z-10 font-mono text-ink/85"
             style={{
-              top: "70px",
+              top: "4.375rem",
               left: "calc(50% + 3.5rem)",
               right: "3rem",
-              fontSize: "17px",
-              lineHeight: "32px",
+              fontSize: "1.0625rem",
+              lineHeight: "2rem",
               whiteSpace: "pre-wrap",
             }}
           >
@@ -595,7 +622,7 @@ As the founder and Creative Director of thecode, I’ve led the development of l
               style={{
                 float: "right",
                 width: "22rem",
-                height: "410px",
+                height: "25.625rem",
                 shapeOutside: "margin-box",
                 marginLeft: "0.5rem",
               }}
@@ -617,8 +644,8 @@ My energy also extends into community-building and education, being a former pro
             rotate={-3}
             width={370}
             style={{
-              top: "400px",
-              right: "calc(4% - 25px)",
+              top: "25rem",
+              right: "calc(4% - 1.5625rem)",
               whiteSpace: "nowrap",
               zIndex: 40,
             }}
@@ -634,7 +661,7 @@ My energy also extends into community-building and education, being a former pro
 
           <div className="pointer-events-none absolute inset-0 z-10 font-hand text-2xl text-ink/60">
             <div
-              style={{ position: "absolute", top: "810px", left: "calc(50% + 4.5rem)" }}
+              style={{ position: "absolute", top: "50.625rem", left: "calc(50% + 4.5rem)" }}
               className="-rotate-3"
             >
               ~ keep making weird things

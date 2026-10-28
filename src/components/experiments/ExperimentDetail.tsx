@@ -19,6 +19,10 @@ type GalleryConfig = {
   rowCaptions?: string[];
 };
 
+function isVideo(src: string): boolean {
+  return /\.(mp4|webm|mov|m4v)(\?|$)/i.test(src);
+}
+
 const galleryConfig: Record<string, GalleryConfig> = {
   "ai-fashion": {
     gridCols: 3,
@@ -364,15 +368,27 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                           background: "#0a0511",
                         }}
                       >
-                        <Image
-                          src={src}
-                          alt={`${track.title} — image ${i + 1}`}
-                          width={1600}
-                          height={1200}
-                          sizes="(max-width: 768px) 90vw, 820px"
-                          className="block h-auto w-full"
-                          style={{ filter: "saturate(1.05) contrast(1.05)" }}
-                        />
+                        {isVideo(src) ? (
+                          <video
+                            src={src}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="metadata"
+                            className="block h-auto w-full"
+                          />
+                        ) : (
+                          <Image
+                            src={src}
+                            alt={`${track.title} — image ${i + 1}`}
+                            width={1600}
+                            height={1200}
+                            sizes="(max-width: 768px) 90vw, 820px"
+                            className="block h-auto w-full"
+                            style={{ filter: "saturate(1.05) contrast(1.05)" }}
+                          />
+                        )}
                       </figure>
                     ))}
                   </div>

@@ -209,6 +209,27 @@ function InlineVideo({
   );
 }
 
+/** Embedded YouTube player — for films hosted on a client's channel. */
+function YouTube({ id, title = "" }: { id: string; title?: string }) {
+  return (
+    <div className="not-prose my-10">
+      <div
+        className="plum-outset relative w-full overflow-hidden bg-plum-dark"
+        style={{ aspectRatio: "16/9" }}
+      >
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${id}`}
+          title={title}
+          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+          allowFullScreen
+          loading="lazy"
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      </div>
+    </div>
+  );
+}
+
 /** Autoplaying video rotated 90° and placed in a 2-column row with
  *  surrounding text children. Use when the raw video is shot vertically
  *  but the page layout wants it wide. */
@@ -515,6 +536,7 @@ export default function ProjectView({ project }: Props) {
               Trio,
               Aside,
               InlineVideo,
+              YouTube,
               LinkButton,
               VideoAside,
               ImageAside,

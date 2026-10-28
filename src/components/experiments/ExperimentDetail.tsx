@@ -17,6 +17,9 @@ type GalleryConfig = {
   noCrop?: boolean;
   order?: number[];
   rowCaptions?: string[];
+  /** Alternate body paragraphs with media (p1, m1, p2, m2, …) instead of
+   *  stacking all text above the gallery. */
+  interleave?: boolean;
 };
 
 function isVideo(src: string): boolean {
@@ -33,7 +36,45 @@ const galleryConfig: Record<string, GalleryConfig> = {
   fulldome: { gridCols: 2, noCrop: true },
   fabrication: { rows: [3, 2, 3, 3, 2, 3], gridAspect: "4 / 3" },
   "live-coding": { rows: [3, 3], gridAspect: "4 / 3" },
+  "generative-ai": { interleave: true },
 };
+
+const MEDIA_FRAME: React.CSSProperties = {
+  borderRadius: "0.625rem",
+  boxShadow:
+    "inset 0 0 0 2px rgba(242,201,168,0.35), 0 0 0 4px #2a1340, 0 10px 30px rgba(0,0,0,0.5)",
+  background: "#0a0511",
+};
+
+/** Single media item for the interleaved layout — capped at 80vh so
+ *  portrait pieces don't dominate the page. */
+function InterleavedMedia({ src, alt }: { src: string; alt: string }) {
+  return (
+    <figure className="relative mx-auto w-fit max-w-full overflow-hidden" style={MEDIA_FRAME}>
+      {isVideo(src) ? (
+        <video
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="block h-auto max-h-[80vh] w-auto max-w-full"
+        />
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          width={1600}
+          height={1200}
+          sizes="(max-width: 768px) 90vw, 820px"
+          className="block h-auto max-h-[80vh] w-auto max-w-full"
+          style={{ filter: "saturate(1.05) contrast(1.05)" }}
+        />
+      )}
+    </figure>
+  );
+}
 
 export default function ExperimentDetail({ track }: { track: Experiment }) {
   const tagLine = track.tags.join(" · ");
@@ -185,7 +226,37 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                 )}
               </header>
 
-              {track.body.length > 0 && (
+              {cfg.interleave && (
+                <div className="flex flex-col gap-7">
+                  {Array.from(
+                    { length: Math.max(track.body.length, allImages.length) },
+                    (_, i) => (
+                      <Fragment key={i}>
+                        {track.body[i] && (
+                          <p
+                            className="px-3 font-sans leading-relaxed md:px-0"
+                            style={{
+                              color: "#f7e3d0",
+                              textShadow: `0 0 3px ${PHOSPHOR_GLOW}`,
+                              fontSize: "clamp(1rem, 1.05vw, 1.125rem)",
+                            }}
+                          >
+                            {track.body[i]}
+                          </p>
+                        )}
+                        {allImages[i] && (
+                          <InterleavedMedia
+                            src={allImages[i]}
+                            alt={`${track.title} — image ${i + 1}`}
+                          />
+                        )}
+                      </Fragment>
+                    ),
+                  )}
+                </div>
+              )}
+
+              {!cfg.interleave && track.body.length > 0 && (
                 <div className="flex flex-col gap-3 px-3 md:px-0">
                   {track.body.map((p, i) => (
                     <p
@@ -203,7 +274,8 @@ export default function ExperimentDetail({ track }: { track: Experiment }) {
                 </div>
               )}
 
-              {allImages.length > 0 &&
+              {!cfg.interleave &&
+                allImages.length > 0 &&
                 (cfg.rows ? (
                   <div className="flex flex-col gap-4">
                     {rowChunks.map((row, rowIdx) => (
